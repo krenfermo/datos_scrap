@@ -12,6 +12,7 @@ from pathlib import Path
 import cloudscraper
 import codecs
 import re
+from funciones import get_info
 
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
@@ -265,7 +266,7 @@ def cuerpo(URL):
         
         for pages in range(1,Total_pages+1) :
             list_url=list()
-            URL2="https://www.computrabajo.com.ar/trabajo-de-"+str(buscar)+"?p="+str(pages)+"&q="+str(buscar)   
+            URL2="https://www.computrabajo.com."+ext_dominio+"/trabajo-de-"+str(buscar)+"?p="+str(pages)+"&q="+str(buscar)   
  
             print("PAGINA:"+ str(pages))
             soup =  navega_page(URL2)
@@ -287,7 +288,7 @@ def cuerpo(URL):
                     print("continua")
                     continue        
                
-                list_url.append("https://www.computrabajo.com.ar"+str(a_href["href"]))
+                list_url.append("https://www.computrabajo.com."+ext_dominio+str(a_href["href"]))
                 
                  
             
@@ -303,7 +304,13 @@ def cuerpo(URL):
 
       
 buscar=str(sys.argv[1]).replace(" ","-")
+pais=str(sys.argv[2])
 
+ext_dominio=""
+if pais=="colombia":
+    ext_dominio="co"
+if pais=="argentina":
+    ext_dominio="ar"
 
 path=Path(__file__).parent.absolute()
 platform=sys.platform
@@ -313,7 +320,7 @@ else:
     diagonal="\\"
 
 pagina_inicial=1
-URL="https://www.computrabajo.com.ar/trabajo-de-"+str(buscar)+"?p="+str(pagina_inicial)+"&q="+str(buscar)   
+URL="https://www.computrabajo.com."+ext_dominio+"/trabajo-de-"+str(buscar)+"?p="+str(pagina_inicial)+"&q="+str(buscar)   
 
 formato1 = "%Y-%m-%d"
 #formato1 = "%Y-%m-%d %H"
@@ -336,7 +343,7 @@ else:
     os.mkdir(path)
     print("CARPETA CREADA")
 
-archivo_ruta=path+diagonal+"DATOS_"+hoy+".csv"
+archivo_ruta=path+diagonal+pais+"_"+hoy+".csv"
 f= open(archivo_ruta,"w+")
 f.write("\"URL\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"REQUERIMIENTOS\","+"\"EMPRESA\","+"\"PUBLICADO\","+"\"TIPO CONTRATO\","+"\"JORNADA\","+"\"EXPERIENCIA\"\n")
 
@@ -344,6 +351,8 @@ f.write("\"URL\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"REQUERIMIENTOS\","+"\"EMP
 cuerpo(URL)
 
 f.close() 
+
+get_info(archivo_ruta,buscar,pais)
 
 
 

@@ -1,0 +1,133 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+
+  <link rel="stylesheet" type="text/css" href="/static/assets/css/jqvmap.min.css" />
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+    <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+    <div class="container-fluid">
+      <div class="yoo-uikits-heading">
+        <h2 class="yoo-uikits-title">Tendencias de empleos</h2>
+      </div>
+    </div>
+    <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-7 col-sm-11">
+          <div class="yoo-iconbox yoo-style1 yoo-color1 yoo-green-bg yoo-gray-shadow">
+            <div class="yoo-iconbox-in">
+              <a href="/tables.html">
+              <div class="yoo-iconbox-title">MARKETING COLOMBIA</div>
+               
+              <img src="/static/marketing_colombia.png" alt="">
+               
+              </a>
+            </div>
+          </div>
+          <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+        </div><!-- .col -->
+        
+         <div class="col-xl-4 col-sm-7">
+          <div class="yoo-iconbox yoo-style1 yoo-color1 yoo-green-bg yoo-gray-shadow">
+            <div class="yoo-iconbox-in">
+            <a href="/precios.html">
+              <div class="yoo-iconbox-title">MARKETING COLOMBIA</div>
+              <div class="yoo-iconbox-number">{{fecha}}</div>
+             
+              <div class="yoo-iconbox-icon"><ion-icon name="podium-outline"></ion-icon></div>
+              
+              </a>
+            </div>
+          </div>
+          <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+        </div><!-- .col -->
+ 
+        
+      </div>
+      <div class="row">
+        <div class="col-xl-7 col-sm-11">
+          <div class="yoo-iconbox yoo-style1 yoo-color1 yoo-pink-bg yoo-gray-shadow">
+            <div class="yoo-iconbox-in">
+              <a href="/tables.html">
+              <div class="yoo-iconbox-title">DISEÑO COLOMBIA</div>
+               
+              <img src="/static/assets/img/card/marketing.png" alt="">
+               
+              </a>
+            </div>
+          </div>
+          <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+        </div><!-- .col -->
+        
+         <div class="col-xl-4 col-sm-7">
+          <div class="yoo-iconbox yoo-style1 yoo-color1 yoo-pink-bg yoo-gray-shadow">
+            <div class="yoo-iconbox-in">
+            <a href="/precios.html">
+              <div class="yoo-iconbox-title">DISEÑO COLOMBIA</div>
+              <div class="yoo-iconbox-number">Fecha</div>
+              
+              <div class="yoo-iconbox-icon"><ion-icon name="color-palette-outline"></ion-icon></div>
+              </a>
+            </div>
+          </div>
+          <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+        </div><!-- .col -->
+ 
+        
+      </div>
+      <div class="row">
+        <div class="col-xl-7 col-sm-11">
+          <div class="yoo-iconbox yoo-style1 yoo-color1 yoo-blue-bg yoo-gray-shadow">
+            <div class="yoo-iconbox-in">
+              <a href="/tables.html">
+              <div class="yoo-iconbox-title">TECHS COLOMBIA</div>
+               
+              <img src="/static/assets/img/card/marketing.png" alt="">
+               
+              </a>
+            </div>
+          </div>
+          <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+        </div><!-- .col -->
+        
+         <<div class="col-xl-4 col-sm-7">
+          <div class="yoo-iconbox yoo-style1 yoo-color1 yoo-blue-bg yoo-gray-shadow">
+            <div class="yoo-iconbox-in">
+            <a href="/precios.html">
+              <div class="yoo-iconbox-title">TECHS COLOMBIA</div>
+              <div class="yoo-iconbox-number">Fecha</div>
+              
+              <div class="yoo-iconbox-icon"><ion-icon name="desktop-outline"></ion-icon></div>
+              </a>
+            </div>
+          </div>
+          <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+        </div><!-- .col -->
+ 
+        
+      </div>
+      
+        
+          
+    <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="/static/assets/js/apexcharts.min.js"></script>
+<script src="/static/assets/js/apexcharts.initialize.js"></script>
+<script src="/static/assets/js/svg-maps/jquery.vmap.min.js"></script>
+<script src="/static/assets/js/svg-maps/jquery.vmap.usa.js"></script>
+<script src="/static/assets/js/svg-maps/jquery.vmap.main.js"></script>
+
+{% endblock javascripts %}

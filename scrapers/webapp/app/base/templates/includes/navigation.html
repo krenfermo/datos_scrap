@@ -1,0 +1,56 @@
+
+  <div class="yoo-height-b60 yoo-height-lg-b60"></div>
+  <header class="yoo-header yoo-style1 yoo-sticky-menu">
+    <div class="yoo-main-header">
+      <div class="yoo-main-header-in">
+        <div class="yoo-main-header-left">
+          <a href="/"
+              
+             class="yoo-logo-link yoo-light-logo">
+            <img src="https://res.cloudinary.com/hdsqazxtw/image/upload/v1557348830/coderhouse_avkeo7.svg" alt="logo-light" /></a>
+          <!-- For Site Title -->
+          <!-- <span class="yoo-site-title">
+            <a href="index.html">Logo</a>
+          </span> -->
+        </div>
+        <div class="yoo-main-header-right">
+          <div class="yoo-nav-wrap yoo-fade-up">
+            <div class="yoo-nav-toggle">
+              <ion-icon name="ellipsis-vertical"></ion-icon>
+            </div>
+            
+            <!-- .yoo-nav -->
+          </div>
+          <!-- .yoo-nav-wrap -->
+          <ul class="yoo-ex-nav yoo-style1 yoo-flex yoo-mp0">
+           
+            
+            <li>
+              <div class="yoo-toggle-body yoo-profile-nav yoo-style1">
+                <div class="yoo-toggle-btn yoo-profile-nav-btn">
+                  <div class="yoo-profile-nav-text">
+                    <span>Bienvenido,</span>
+                    <h4>
+                        {{ current_user.username }}
+                    </h4>
+                  </div>
+                  <div class="yoo-profile-nav-img">
+                    <img src="/static/assets/img/profile-pic.png" alt="profile">
+                  </div>
+                </div>
+                <ul class="yoo-dropdown yoo-style1">
+                  <li>
+                    <a href="settings.html"><ion-icon name="person-circle"></ion-icon>My Profile</a>
+                  </li>
+                  
+                  <li class="yoo-dropdown-cta">
+                      <a href={{ url_for('base_blueprint.logout') }} >Sign Out</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header><!-- .yoo-header -->

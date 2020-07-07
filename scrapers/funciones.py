@@ -23,11 +23,12 @@ def crear_grafica(tecnologias,total_empleos,rubro):
     nombres = valores.keys()
     plt.pie(manzanas, labels=nombres, autopct="%0.1f %%")
     plt.title("Los 10 más populares en "+str(total_empleos)+" empleos", bbox={'facecolor':'0.8', 'pad':5})
-    #plt.show()
-    fig=plt.savefig(str(Path(__file__).parent.absolute())+diagonal+rubro+'.png')
+    path_img=str(path)+"/webapp/app/base/static/"+str(rubro)+'.png'
+    fig=plt.savefig(path_img)
     plt.close(fig)
 
-def get_info(archivo,rubro):
+def get_info(archivo,rubro,pais):
+    rubro=rubro+"_"+pais
     col_list = ["DESCRIPCION", "EXPERIENCIA"]
     df=pd.read_csv(archivo, sep=',',encoding="utf-8",usecols=col_list)
     list1=df["EXPERIENCIA"]
@@ -59,8 +60,8 @@ def get_info(archivo,rubro):
         if experiencia=="N/D":
             descripcion_nada.append(descr)
         contador+=1
-        archivo_tecnologias=str(Path(__file__).parent.absolute())+diagonal+"dict_"+str(rubro)+".txt"
-    #with codecs.open(str(Path(__file__).parent.absolute())+diagonal+"dict_"+str(rubro)+".txt", "r", encoding="ISO-8859-1",errors='ignore') as f:
+    archivo_tecnologias=str(Path(__file__).parent.absolute())+diagonal+"dict_"+str(rubro)+".txt"
+ 
     #    data = f.readlines()
     tecnos_df=pd.read_csv(archivo_tecnologias, sep=',',encoding = "utf-8")
     tecnologias=list(tecnos_df.columns)
@@ -74,7 +75,7 @@ def get_info(archivo,rubro):
     conjunto=df["DESCRIPCION"]
 
     tecnologias=get_diccionario(conjunto,tecnologias_todas)
-    crear_grafica(tecnologias,len(conjunto),"marketing")
+    crear_grafica(tecnologias,len(conjunto),rubro)
 
 
 platform=sys.platform
@@ -82,8 +83,10 @@ if platform=="linux":
     diagonal="/"
 else:
     diagonal="\\"
+path=Path(__file__).parent.absolute()
 
 if __name__ == "__main__":
     archivo=str(sys.argv[1])
-    get_info(archivo,"marketing")
+    rubro=str(sys.argv[2])
+    get_info(archivo,rubro)
  

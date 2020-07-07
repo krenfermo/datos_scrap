@@ -1,0 +1,195 @@
+{% extends "layouts/base.html" %}
+ 
+
+{% block title %} ROTOS {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="yoo-height-b30 yoo-height-lg-b30"></div>
+<div class="container">
+  <div class="yoo-uikits-heading">
+    <h2 class="yoo-uikits-title">TABLA: PRECIOS HISTORICOS</h2>
+  </div>
+</div>
+<div class="yoo-height-b30 yoo-height-lg-b30"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="yoo-card yoo-style1">
+        <div class="yoo-card-heading">
+          <div class="yoo-card-heading-left">
+            <h2 class="yoo-card-title">{{registros}} registros</h2>
+          </div>
+          <div class="yoo-card-heading-right">
+            
+            <!-- Code Modal -->
+            <div class="modal fade" id="general-table">
+              <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">{{registros}} registros</h5>
+                          <div class="yoo-sidebar-search">
+                          <form action="#" class="yoo-search yoo-style1 yoo-search-md">
+                            <input type="text" placeholder="Search..." class="yoo-search-input">
+                            <button class="yoo-search-submit"><ion-icon name="search"></ion-icon></button>
+                            <button class="yoo-voice-btn"><ion-icon name="mic"></ion-icon></button>
+                          </form>
+                        </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <ion-icon name="close"></ion-icon>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="yoo-table-heading-left">
+                      <form action="/precios/" class="yoo-search yoo-style1 yoo-search-md" method="POST">
+                        <input type="text" id="codigo" name="codigo" placeholder="Buscar codigo o codigo_proveedor..." class="yoo-search-input">
+                        <button class="yoo-search-submit"><ion-icon name="search"></ion-icon></button>
+                      </form>
+                    </div>
+        <div class="yoo-card-body">
+          <div class="yoo-padd-lr-20">
+            <div class="yoo-height-b20 yoo-height-lg-b20"></div>
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">CÓDIGO_PROVEEDOR</th>
+                  <th scope="col">PRECIO_PROV</th>
+                  <th scope="col">PRECIO_PUBLICO</th>
+                  <th scope="col">COSTO</th>
+                  <th scope="col">FECHA ACTUALIZACION</th>
+                  <th scope="col">BODEGA</th>
+                  <th scope="col">CÓDIGO</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                
+               {% for item in info%} 
+                <tr>
+                  <th scope="row">{{item['id']}}</th>
+                  <td>{{item['codigo']}}</td>
+                  <td>{{item['codigo_prov']}}</td>
+                  <td>{{item['precio']}}</td>
+                  <td>{{item['costo']}}</td>
+                  <td>{{item['precio_prov']}}</td>
+                  
+                  <td>{{item['bodega']}}</td>
+                  <td>{{item['fecha_actualizacion']}}</td>
+                  
+                </tr>
+              {% endfor %}
+                
+      
+
+              </tbody>
+            </div>  
+            </table>
+             <!-- Button trigger modal -->
+     
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">¿Desea borrar el registro <label id="delId" class="center"> </label>?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                
+                <div id="delURL" class="center">
+                </div> 
+
+              
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger"   data-dismiss="modal"  onclick="Borrar_save(this)">Borrar</button>
+              </div>
+            </div>
+            </div>
+            </div>
+            <div class="yoo-height-b20 yoo-height-lg-b20">
+            
+            </div>
+          </div>
+        </div>
+      </div><!-- .yoo-card -->
+      
+      <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+
+    </div><!-- .col -->
+  </div>
+</div>
+<div class="yoo-height-b30 yoo-height-lg-b30"></div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+   <script>
+    
+  function Borrar_del(elm)
+    {
+      localStorage.setItem('delId',$(elm).attr('data-id'));
+       document.getElementById("delId").innerHTML =localStorage.getItem('delId');
+       document.getElementById("delURL").innerHTML =$(elm).attr('data-url');
+       
+
+    }
+  
+  function Borrar_save(elm)
+    {
+      var id_roto=localStorage.getItem('delId');
+      //alert(id_roto);
+      
+    
+      var url = "http://localhost:5000/links_rotos/delete/"+id_roto;
+      
+
+      var jqxhr =
+          $.ajax({
+              url: url,
+              processData : false,
+              type : "DELETE",
+              
+          })
+          .done (function(data) { //$('#ajaxDiv_del').html(data);
+                           location.reload();
+                                 })
+          .fail (function()  {  alert("Error ")   ; })
+          ;
+      
+   
+     
+      return true;
+     
+
+    }
+
+
+ 
+
+ 
+   
+  </script>
+
+{% endblock javascripts %}
