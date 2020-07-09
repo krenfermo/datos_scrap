@@ -7,6 +7,7 @@ Copyright (c) 2019 - present AppSeed.us
 from flask import Flask, url_for
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+
 from importlib import import_module
 from logging import basicConfig, DEBUG, getLogger, StreamHandler
 from os import path
@@ -73,6 +74,8 @@ def apply_themes(app):
 
 def create_app(config, selenium=False):
     app = Flask(__name__, static_folder='base/static')
+    #from flask_wtf.csrf import CSRFProtect
+    #csrf.init_app(app)
     app.config.from_object(config)
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     if selenium:
@@ -82,4 +85,6 @@ def create_app(config, selenium=False):
     configure_database(app)
     configure_logs(app)
     apply_themes(app)
+    #csrf = CSRFProtect(app) 
+
     return app

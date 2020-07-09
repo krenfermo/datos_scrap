@@ -3,7 +3,7 @@
 License: MIT
 Copyright (c) 2019 - present AppSeed.us
 """
-
+from flask_login import login_required, current_user
 from flask import jsonify, render_template, redirect, request, url_for
 from flask_login import (
     current_user,
@@ -31,6 +31,7 @@ def route_errors(error):
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    print(request.form) 
     login_form = LoginForm(request.form)
     if 'login' in request.form:
         
@@ -55,6 +56,8 @@ def login():
                                 form=login_form)
     return redirect(url_for('home_blueprint.index'))
 
+
+    
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     login_form = LoginForm(request.form)

@@ -11,6 +11,27 @@ from app import db, login_manager
 
 from app.base.util import hash_pass
 
+class Categorias(db.Model):
+
+    __tablename__ = 'Categorias'
+
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String, unique=True)
+    def __init__(self, nombre):
+        self.nombre = nombre
+        
+    def __repr__(self):
+        return str(self.nombre)
+    
+    
+class Tecnologias(db.Model):
+
+    __tablename__ = 'Tecnologias'
+
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String, unique=True)
+    
+    
 class User(db.Model, UserMixin):
 
     __tablename__ = 'User'

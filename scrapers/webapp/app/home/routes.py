@@ -17,15 +17,13 @@ from flask import  request, jsonify, make_response
 from app import functions
 import json
 from datetime import date
-
-
+from app.base.forms import CategoriaForm
+from app.base.models import Categorias
+from app import db
 
  
 from . import nocache
  
-
-
-
  
     
 @blueprint.route("/links_rotos/delete/<id>", endpoint="delete_rotos", methods=["DELETE"])
@@ -69,20 +67,6 @@ def index():
     if not current_user.is_authenticated:
         return redirect(url_for('base_blueprint.login'))
 
-
-    conn=conexion2.Conexion()
-            
-    cur = conn.conn.cursor()   
-    cur.execute( "select * from enlaces_rotos;" ) 
-    
-    rotos=cur.fetchall()
-    registros_rotos=int(len(rotos))
-
-
-
-
-    conn.conn.close()
-
     return render_template('index.html')
 
 
@@ -96,7 +80,28 @@ def colombia():
     return render_template('colombia.html',fecha=date.today())
 
 
+@blueprint.route('/categorias', methods=['GET', 'POST'])
+@login_required
+def categorias():
+    catego_form = CategoriaForm(request.form)
+    
+    
+    if 'nombre' in request.form :
+        
+        nombre  = request.form['nombre']
+        catego = Categorias.query.filter_by(nombre=nombre).first()
+        
+        if catego:
+            return render_template( 'categorias.html', nombre=nombre,msg_error='Categoría existe¡¡',form=catego_form)
+        catego = Categorias(nombre)
+ 
+        db.session.add(catego)
+        db.session.commit()
+        return render_template( 'categorias.html',nombre=nombre, msg='Categoría creada¡¡',form=catego_form)
+    return render_template( 'categorias.html',form=catego_form)
 
+        
+    
 
 
 @blueprint.route('/<template>')
@@ -104,7 +109,7 @@ def colombia():
 def route_template(template):
 
     try:
-        
+        print(requests)
  
         if template=='tables.html':
             #info = requests.get('http://localhost:5000/links_rotos/')
