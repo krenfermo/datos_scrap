@@ -71,10 +71,76 @@
           </div>
         </div>
       </div>
-        
+            <div class="container mt-3">
+              <h2>Categorías agregadas</h2>
+
+              <input class="form-control" id="myInput" type="text" placeholder="Search..">
+              <br>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Categoría</th>
+                   
+                  </tr>
+                </thead>
+                <tbody id="myTable">
+                  {% for item in categorias%} 
+                        <tr>
+              
+                          <td>{{item}}</td>
+                            <td>
+                                  <button class="yoo-table-action-btn yoo-style1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><ion-icon name="ellipsis-horizontal"></ion-icon></button>
+                                  <div class="dropdown-menu">
+                                     
+                                    <div class="dropdown-divider"></div>
+                                    <a data-id="{{item}}"  class="dropdown-item" href="#" data-toggle="modal" onclick="Borrar_del(this)" data-target="#exampleModalLong">Borrar</a>
+                                     
+                                    <div class="dropdown-divider"></div>
+                                
+                                  </div>
+                                </td> 
+                          
+                        </tr>
+                      {% endfor %}
+                  
+                </tbody>
+              </table>
+              
+            </div>
       </div>
       
         
+        
+        
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">¿Desea borrar el registro <label id="delId" class="center"> </label>?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+                  <div class="modal-body">
+                    
+                        <div id="delURL" class="center">
+                            </div> 
+
+                              
+                              </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-danger"   data-dismiss="modal"  onclick="Borrar_save(this)">Borrar</button>
+                                      </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="yoo-height-b20 yoo-height-lg-b20">
+                    
+                    </div>
+              </div>
+        </div>
+      </div><!-- .yoo-card -->
           
     <div class="yoo-height-b30 yoo-height-lg-b30"></div>
 
@@ -89,4 +155,37 @@
 <script src="/static/assets/js/svg-maps/jquery.vmap.usa.js"></script>
 <script src="/static/assets/js/svg-maps/jquery.vmap.main.js"></script>
 
+   <script>
+    
+  function Borrar_del(elm)
+    {
+      localStorage.setItem('delId',$(elm).attr('data-id'));
+       document.getElementById("delId").innerHTML =localStorage.getItem('delId');
+        
+       
+
+    }
+  
+  function Borrar_save(elm)
+    {
+      var id_roto=localStorage.getItem('delId');
+      
+      var url = "/categorias/delete/"+id_roto;
+      
+      var jqxhr =
+          $.ajax({
+              url: url,
+              processData : false,
+              type : "DELETE",
+              
+          })
+          .done (function(data) { //$('#ajaxDiv_del').html(data);
+                           location.reload();
+                                 })
+          .fail (function()  {  alert("Error ")   ; })
+          ;
+     
+      return true;
+    }
+  </script>
 {% endblock javascripts %}

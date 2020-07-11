@@ -26,11 +26,14 @@ from . import nocache
  
  
     
-@blueprint.route("/links_rotos/delete/<id>", endpoint="delete_rotos", methods=["DELETE"])
-def route_borra_rotos(id):    
+@blueprint.route("/categorias/delete/<nombre>", endpoint="delete_rotos", methods=["DELETE"])
+def route_borra_catego(nombre):    
     #if  current_user.is_authenticated:
         #print( "delete from enlaces_rotos where id="+str(id) ) 
-        delete=functions.f_delete_rotos(id)
+
+        catego = Categorias.query.filter_by(nombre=nombre).first()
+        db.session.delete(catego)
+        db.session.commit()
         return jsonify('URL borrado correcto'), 201
 
     
@@ -84,21 +87,27 @@ def colombia():
 @login_required
 def categorias():
     catego_form = CategoriaForm(request.form)
-    
+    categorias = Categorias.query.order_by(Categorias.nombre.asc()).all()
     
     if 'nombre' in request.form :
         
         nombre  = request.form['nombre']
+        nombre=nombre.upper()
         catego = Categorias.query.filter_by(nombre=nombre).first()
         
         if catego:
-            return render_template( 'categorias.html', nombre=nombre,msg_error='Categoría existe¡¡',form=catego_form)
+            return render_template( 'categorias.html', nombre=nombre,msg_error='Categoría existe¡¡',form=catego_form, categorias=categorias)
+        
         catego = Categorias(nombre)
  
         db.session.add(catego)
         db.session.commit()
-        return render_template( 'categorias.html',nombre=nombre, msg='Categoría creada¡¡',form=catego_form)
-    return render_template( 'categorias.html',form=catego_form)
+        categorias = Categorias.query.order_by(Categorias.nombre.asc()).all()
+        return render_template( 'categorias.html',nombre=nombre, msg='Categoría creada¡¡',form=catego_form, categorias=categorias)
+        
+        
+
+    return render_template( 'categorias.html',form=catego_form, categorias=categorias)
 
         
     
