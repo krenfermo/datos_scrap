@@ -5,7 +5,9 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from flask_login import UserMixin
-from sqlalchemy import Binary, Column, Integer, String
+from sqlalchemy import Binary, Column, Integer, String,ForeignKey
+
+from sqlalchemy.orm import relationship
 
 from app import db, login_manager
 
@@ -23,14 +25,24 @@ class Categorias(db.Model):
     def __repr__(self):
         return str(self.nombre)
     
-    
 class Tecnologias(db.Model):
 
     __tablename__ = 'Tecnologias'
 
     id = Column(Integer, primary_key=True)
-    nombre = Column(String, unique=True)
-    
+    nombre = Column(String)
+    catego_id = Column(Integer)
+    #categorias = relationship('Categorias', backref='Categoria')
+
+
+    def __init__(self, nombre,catego_id):
+        self.nombre = nombre 
+        self.catego_id= catego_id 
+    def __repr__(self):
+        return '<Categoria %r>' % (self.nombre)
+def getCategoria():
+    p = Categorias.query
+    return p   
     
 class User(db.Model, UserMixin):
 
@@ -68,3 +80,4 @@ def request_loader(request):
     username = request.form.get('username')
     user = User.query.filter_by(username=username).first()
     return user if user else None
+
