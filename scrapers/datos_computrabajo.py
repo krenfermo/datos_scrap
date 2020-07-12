@@ -13,7 +13,7 @@ import cloudscraper
 import codecs
 import re
 from funciones import get_info
-from webapp.app.base.models import Categorias
+from conexion import Conexion
 
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
@@ -303,57 +303,68 @@ def cuerpo(URL):
 
 #https://www.computrabajo.com.ar/trabajo-de-marketing?p=1&q=marketing
 
-      
-buscar=str(sys.argv[1]).replace(" ","-")
-pais=str(sys.argv[2])
+conexion=Conexion()
+            
+cur = conexion.conn.cursor()   
+cur.execute( "SELECT nombre FROM `categorias`")
+categorias=cur.fetchall()
+conexion.conn.close()   
+paises=["colombia","argentina"]
+for pais in paises:
+    for catego in categorias:
+        print(catego[0].replace(" ","-"))
+        buscar=str(catego[0].replace(" ","-"))
 
-ext_dominio=""
-if pais=="colombia":
-    ext_dominio="co"
-if pais=="argentina":
-    ext_dominio="ar"
+        #buscar=str(sys.argv[1]).replace(" ","-")
+        #pais=str(sys.argv[2])
 
-path=Path(__file__).parent.absolute()
-platform=sys.platform
-if platform=="linux":
-    diagonal="/"
-else:
-    diagonal="\\"
+        ext_dominio=""
+        if pais=="colombia":
+            ext_dominio="co"
+        if pais=="argentina":
+            ext_dominio="ar"
 
-pagina_inicial=1
-URL="https://www.computrabajo.com."+ext_dominio+"/trabajo-de-"+str(buscar)+"?p="+str(pagina_inicial)+"&q="+str(buscar)   
+        path=Path(__file__).parent.absolute()
+        platform=sys.platform
+        if platform=="linux":
+            diagonal="/"
+        else:
+            diagonal="\\"
 
-formato1 = "%Y-%m-%d"
-#formato1 = "%Y-%m-%d %H"
-hoy = datetime.today()
-hoy = hoy.strftime(formato1)  
+        pagina_inicial=1
+        URL="https://www.computrabajo.com."+ext_dominio+"/trabajo-de-"+str(buscar)+"?p="+str(pagina_inicial)+"&q="+str(buscar)   
 
-
-path=str(path)+diagonal+"DATOS_COMPUTRABAJO"
-if os.path.exists(path):
-    pass
-else:     
-    os.mkdir(path)
-    
-path=str(path)+diagonal+hoy
-print(path)
-if os.path.exists(path):
-    print("CARPETA YA EXISTIA Y NO LA CREA")
-else:
-    
-    os.mkdir(path)
-    print("CARPETA CREADA")
-
-archivo_ruta=path+diagonal+pais+"_"+hoy+".csv"
-f= open(archivo_ruta,"w+")
-f.write("\"URL\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"REQUERIMIENTOS\","+"\"EMPRESA\","+"\"PUBLICADO\","+"\"TIPO CONTRATO\","+"\"JORNADA\","+"\"EXPERIENCIA\"\n")
+        formato1 = "%Y-%m-%d"
+        #formato1 = "%Y-%m-%d %H"
+        hoy = datetime.today()
+        hoy = hoy.strftime(formato1)  
 
 
-cuerpo(URL)
+        path=str(path)+diagonal+"DATOS_COMPUTRABAJO"
+        if os.path.exists(path):
+            pass
+        else:     
+            os.mkdir(path)
+            
+        path=str(path)+diagonal+hoy
+        print(path)
+        if os.path.exists(path):
+            print("CARPETA YA EXISTIA Y NO LA CREA")
+        else:
+            
+            os.mkdir(path)
+            print("CARPETA CREADA")
 
-f.close() 
+        archivo_ruta=path+diagonal+pais+"_"+buscar+"_"+hoy+".csv"
+        f= open(archivo_ruta,"w+")
+        f.write("\"URL\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"REQUERIMIENTOS\","+"\"EMPRESA\","+"\"PUBLICADO\","+"\"TIPO CONTRATO\","+"\"JORNADA\","+"\"EXPERIENCIA\"\n")
 
-get_info(archivo_ruta,buscar,pais)
+
+        cuerpo(URL)
+
+        f.close() 
+
+        get_info(archivo_ruta,buscar,pais)
 
 
 

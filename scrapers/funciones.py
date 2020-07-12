@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import sys
 from pathlib import Path
 import codecs
+from conexion import Conexion
 
 def get_diccionario(descripcion,tecnologias_todas):
     tecnologias_lista=[]
@@ -28,7 +29,7 @@ def crear_grafica(tecnologias,total_empleos,rubro):
     plt.close(fig)
 
 def get_info(archivo,rubro,pais):
-    rubro=rubro+"_"+pais
+    rubro_pais=rubro+"_"+pais
     col_list = ["DESCRIPCION", "EXPERIENCIA"]
     df=pd.read_csv(archivo, sep=',',encoding="utf-8",usecols=col_list)
     list1=df["EXPERIENCIA"]
@@ -62,20 +63,48 @@ def get_info(archivo,rubro,pais):
         contador+=1
     archivo_tecnologias=str(Path(__file__).parent.absolute())+diagonal+"dict_"+str(rubro)+".txt"
  
-    #    data = f.readlines()
-    tecnos_df=pd.read_csv(archivo_tecnologias, sep=',',encoding = "utf-8")
-    tecnologias=list(tecnos_df.columns)
     
-    #tecnologias = data[0].split(",")
-    tecnologias= [x.replace("\n","").lstrip().rstrip() for x in tecnologias]
+    #tecnos_df=pd.read_csv(archivo_tecnologias, sep=',',encoding = "utf-8")
+    #tecnologias=list(tecnos_df.columns)
+    
+    
+    #tecnologias= [x.replace("\n","").lstrip().rstrip() for x in tecnologias]
 
     #tecnologias=map(str.strip, tecnologias)
-    tecnologias_todas=set(tecnologias) 
- 
+    
+    categoria=rubro
+    conexion=Conexion()
+                
+    cur = conexion.conn.cursor()   
+    cur.execute( "SELECT id FROM `categorias` where nombre='"+categoria+"'")
+
+    catego_id=cur.fetchone()
+    print(categoria)
+    cur.execute( "SELECT nombre FROM `tecnologias` where catego_id="+str(catego_id[0]))
+    tecnos=cur.fetchall()
+    
+     
+    conexion.conn.close()
+    cadena_tecnos=list()
+    for tecnologias in tecnos:
+        cadena_tecnos.append( [x.replace("\n","").lstrip().rstrip() for x in tecnologias])
+    
+    
+    cd_tecnos=list()   
+    for item in cadena_tecnos:
+        tec=item[0]
+        cd_tecnos.append(tec.lower())
+        
+    
+    print(cd_tecnos)
+    tecnologias_todas=set(cd_tecnos) 
+    #print(tecnologias)
+    #tecnologias_todas=set(tecnologias) 
+    
     conjunto=df["DESCRIPCION"]
 
     tecnologias=get_diccionario(conjunto,tecnologias_todas)
-    crear_grafica(tecnologias,len(conjunto),rubro)
+    crear_grafica(tecnologias,len(conjunto),rubro_pais)
 
 
 platform=sys.platform
@@ -86,7 +115,37 @@ else:
 path=Path(__file__).parent.absolute()
 
 if __name__ == "__main__":
-    archivo=str(sys.argv[1])
-    rubro=str(sys.argv[2])
-    get_info(archivo,rubro)
- 
+    get_info("DATOS_COMPUTRABAJO/2020-07-07/colombia_2020-07-07.csv","MARKETING","colombia")
+    exit() 
+    categoria=str(sys.argv[1])
+    conexion=Conexion()
+                
+    cur = conexion.conn.cursor()   
+    cur.execute( "SELECT id FROM `categorias` where nombre='"+categoria+"'")
+    catego_id=cur.fetchone()
+    
+    cur.execute( "SELECT nombre FROM `tecnologias` where catego_id="+str(catego_id[0]))
+    tecnos=cur.fetchall()
+    
+     
+    conexion.conn.close()
+    cadena_tecnos=list()
+    for tecnologias in tecnos:
+        cadena_tecnos.append( [x.replace("\n","").lstrip().rstrip() for x in tecnologias])
+    
+    
+    cd_tecnos=list()   
+    for item in cadena_tecnos:
+        tec=item[0]
+        cd_tecnos.append(tec)
+        
+    
+    print(cd_tecnos)
+    tecnologias_todas=set(cd_tecnos) 
+    print(tecnologias_todas)
+    exit()
+    
+    #archivo=str(sys.argv[1])
+    #rubro=str(sys.argv[2])
+    #pais=str(sys.argv[3])
+   

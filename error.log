@@ -5447,3 +5447,33 @@ INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 01:05:59] "[36mGET /static/assets/js/s
 INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 01:05:59] "[36mGET /static/assets/fonts/Inter-Regular.ttf HTTP/1.1[0m" 304 -
 INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 01:05:59] "[36mGET /static/assets/fonts/Inter-SemiBold.ttf HTTP/1.1[0m" 304 -
 INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 01:05:59] "[36mGET /static/assets/fonts/Inter-Medium.ttf HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in '/home/joaquin/Proyectos/datos_scrap/scrapers/webapp/app/base/models.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 198-786-748
+INFO:werkzeug: * Detected change in '/home/joaquin/Proyectos/datos_scrap/scrapers/webapp/app/base/models.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 198-786-748
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:45] "[37mGET /tecnologias HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:46] "[36mGET /static/assets/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:46] "[36mGET /static/assets/css/iDashboard.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:46] "[36mGET /static/assets/css/jqvmap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:46] "[36mGET /static/assets/js/jquery-1.12.4.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:46] "[36mGET /static/assets/img/profile-pic.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:46] "[36mGET /static/assets/js/bootstrap.bundle.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:46] "[36mGET /static/assets/js/smooth-scrollbar.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:47] "[36mGET /static/assets/js/apexcharts.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:47] "[36mGET /static/assets/js/apexcharts.initialize.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:47] "[36mGET /static/assets/js/iDashboard.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:47] "[36mGET /static/assets/js/svg-maps/jquery.vmap.usa.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:47] "[36mGET /static/assets/js/svg-maps/jquery.vmap.main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:47] "[36mGET /static/assets/js/svg-maps/jquery.vmap.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:48] "[36mGET /static/assets/fonts/Inter-SemiBold.ttf HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:48] "[36mGET /static/assets/fonts/Inter-Regular.ttf HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:48] "[36mGET /static/assets/fonts/Inter-Medium.ttf HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Jul/2020 02:23:52] "[37mGET /getTecnologias/12 HTTP/1.1[0m" 201 -
