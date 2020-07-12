@@ -110,7 +110,34 @@ def route_borra_catego(nombre):
         db.session.commit()
         return jsonify('URL borrado correcto'), 201
 
+
+@blueprint.route("/getTecnologias/<id>", methods=["POST","GET"])
+def route_get_tecnos(id):    
+    #if  current_user.is_authenticated:
+        #print( "delete from enlaces_rotos where id="+str(id) ) 
+
+        tecnos = Tecnologias.query.filter_by(catego_id=id).order_by(Tecnologias.nombre.asc()).all()
+        tecnologias=""
+        for item in tecnos:
+            tecnologias+=str(item)+","
+        tecnologias=tecnologias[:-1]
+       
+        json_string = json.loads(json.dumps(tecnologias))
+        
+        return jsonify(json_string), 201
+
+
     
+@blueprint.route("/tecnologias/delete/<nombre>", endpoint="delete_tecnologias", methods=["DELETE"])
+def route_borra_tecnos(nombre):    
+    #if  current_user.is_authenticated:
+        #print( "delete from enlaces_rotos where id="+str(id) ) 
+
+        tecno = Tecnologias.query.filter_by(nombre=nombre).first()
+        db.session.delete(tecno)
+        db.session.commit()
+        return jsonify('URL borrado correcto'), 201
+   
 
 @blueprint.route('/tecnologias', methods=['GET', 'POST'])
 @login_required
@@ -123,20 +150,22 @@ def tecnologias():
         categoria_id  = request.form['categoria']
         nombre=nombre.upper()
         catego = Categorias.query.filter_by(id=categoria_id).first()
+        tecnologias=Tecnologias.query.all()
         if catego is None:
-            return render_template( 'tecnologias.html',msg_error='Selecciona Categoria¡¡',form=tecno_form)
+            return render_template( 'tecnologias.html',msg_error='Selecciona Categoria',form=tecno_form)
         tecno = Tecnologias.query.filter_by(nombre=nombre).filter_by(catego_id=categoria_id).first()
         
-        print("pasa")
+        
         if tecno:
             return render_template( 'tecnologias.html', nombre=nombre,categoria=catego,msg_error='Tecnología existe ',form=tecno_form, tecno=tecno)
-        print(catego)
+        
         tecno = Tecnologias(nombre,categoria_id)
-        print("va guardar")
+        
         db.session.add(tecno)
         db.session.commit()
-        
-        return render_template( 'tecnologias.html',nombre=nombre, msg='Categoría creada¡¡',form=tecno_form)
+        tecnologias=Tecnologias.query.filter_by(catego_id=categoria_id).order_by(Tecnologias.nombre.asc()).all()
+        registros=str(len(tecnologias)) +" registros"
+        return render_template( 'tecnologias.html',nombre=nombre,registros=registros,tecnologias=tecnologias, msg='Tecnología creada¡¡',form=tecno_form)
         
         
 

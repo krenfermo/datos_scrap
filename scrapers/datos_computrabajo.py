@@ -13,6 +13,7 @@ import cloudscraper
 import codecs
 import re
 from funciones import get_info
+from webapp.app.base.models import Categorias
 
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')

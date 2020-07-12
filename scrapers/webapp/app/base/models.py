@@ -39,7 +39,7 @@ class Tecnologias(db.Model):
         self.nombre = nombre 
         self.catego_id= catego_id 
     def __repr__(self):
-        return '<Categoria %r>' % (self.nombre)
+        return str(self.nombre)
 def getCategoria():
     p = Categorias.query
     return p   
