@@ -26,9 +26,19 @@ from . import nocache
  
 from os import listdir
 from os.path import isfile, isdir
-import os
+import os,sys
 import platform
+from os import remove
 
+import importlib.util
+
+def module_from_file(module_name, file_path):
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+#sys.path.insert(1,'.')
 def creation_date(path_to_file):
 
     if platform.system() == 'Windows':
@@ -101,7 +111,7 @@ def colombia():
         fecha_archivo=datetime.fromtimestamp(creation_date(str(path)+"/base/static/"+item+"_colombia.png"))
         fecha_archivo=str(fecha_archivo).split(" ")[0]
         item_fotos.append({"foto":item,"fecha":fecha_archivo})
-    return render_template('colombia.html',fecha=date.today(),fotos=item_fotos,pais="colombia")
+    return render_template('colombia.html',fecha=date.today(),fotos=item_fotos,pais="colombia",nombre="Colombia")
 
 
 @blueprint.route('/argentina')
@@ -125,7 +135,59 @@ def argentina():
         item_fotos.append({"foto":item,"fecha":fecha_archivo})
     #item_fotos=set(item_fotos)
     print(item_fotos)
-    return render_template('colombia.html',fecha=date.today(),fotos=item_fotos,pais="argentina")
+    return render_template('colombia.html',fecha=date.today(),fotos=item_fotos,pais="argentina",nombre="Argentina")
+
+
+
+@blueprint.route('/configuracion', methods=['GET', 'POST'])
+@login_required
+def configuracion():
+    msg_error=""
+    
+    if 'select_categorias' in request.form :
+        select_categorias  = request.form['select_categorias']
+        
+        if select_categorias=="null":
+            msg_error="Selecciona categoría"
+        path=Path(__file__).parent.absolute()
+        path=str(path).replace("webapp/app/home","")
+        
+        select_categorias=select_categorias.replace("_","-").replace(" ","-")
+        
+        fecha=os.listdir(str(path)+"DATOS_COMPUTRABAJO/")
+        mayor=""
+        leng=len(fecha)
+        carpeta=max(fecha)
+        
+        archivos=list()
+        paises=["colombia","argentina"]
+        for pais in paises:
+            archivo=str(path)+"DATOS_COMPUTRABAJO/"+carpeta+"/"+pais+"_"+str(select_categorias).replace(" ","-")+"_"+carpeta+".csv"
+            print(select_categorias)
+            if os.path.exists(archivo):
+                archivos.append(archivo)
+        
+        for item in sys.path:
+            if "datos_scrap" in item:
+                carpeta=item.replace("webapp","")
+        
+        #sys.path.insert(1,carpeta)
+        baz = module_from_file("funciones", carpeta+"/funciones.py")
+        
+        for item in archivos:
+            if "colombia" in item:
+                baz.get_info(item,select_categorias,"colombia")    
+            if "argentina" in item:
+                baz.get_info(item,select_categorias,"argentina")
+            print("llama")
+            print("actegoria:"+select_categorias)
+            #exit()
+            
+        #print(dir(baz))
+        
+        
+    categorias = Categorias.query.order_by(Categorias.nombre.asc()).all()
+    return render_template( 'configuracion.html',categorias=categorias,msg_error=msg_error)
 
 
 @blueprint.route('/categorias', methods=['GET', 'POST'])
@@ -162,8 +224,22 @@ def route_borra_catego(nombre):
         #print( "delete from enlaces_rotos where id="+str(id) ) 
 
         catego = Categorias.query.filter_by(nombre=nombre).first()
+        path=Path(__file__).parent.absolute()
+        path=str(path).replace("webapp/app/home","webapp/app/")
+        path=str(path)+"base/static/"
+        paises=["colombia","argentina"]
+        for pais in paises:
+            archivo=str(path)+str(nombre).replace(" ","-")+"_"+pais+".png"
+            if os.path.exists(archivo):
+                print(archivo)
+                remove(archivo)
+        
+
         db.session.delete(catego)
         db.session.commit()
+        
+
+        
         return jsonify('URL borrado correcto'), 201
 
 

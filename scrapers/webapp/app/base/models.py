@@ -32,7 +32,6 @@ class Tecnologias(db.Model):
     id = Column(Integer, primary_key=True)
     nombre = Column(String)
     catego_id = Column(Integer)
-    #categorias = relationship('Categorias', backref='Categoria')
 
 
     def __init__(self, nombre,catego_id):

@@ -1,0 +1,85 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Settings {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+    <div class="container">
+      <div class="yoo-uikits-heading">
+        <h2 class="yoo-uikits-title">Configuración</h2>
+      </div>
+    </div>
+    <div class="yoo-height-b30 yoo-height-lg-b30"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="yoo-card yoo-style1">
+            <div class="yoo-card-body">
+              <div class="tab-content">
+                <div class="yoo-profile-setting-container">
+                  <div class="yoo-height-b45 yoo-height-lg-b45"></div>
+                  <div class="yoo-flex">
+                    <div class="yoo-profile-setting-heading">
+                      {% if msg_error %}
+                    <div class="alert alert-warning">
+                      <strong> {{ msg_error | safe }}</strong>
+                    </div>
+                     
+                {% endif %} 
+                      <h2 class="yoo-profile-setting-title">Ejecutar categorías</h2>
+                      <div class="yoo-profile-setting-subtitle">Selecciona la categoría para actualizar las estadísticas.</div>
+                    </div>
+                  </div>
+                  <form method="post" action="" class="yoo-form yoo-style1">
+                  <div class="yoo-height-b20 yoo-height-lg-b20"></div>
+                  <div class="yoo-form-field-wrap yoo-style1">
+                    <label class="yoo-form-field-label yoo-type1">Categorías</label>
+                    <div class="input-group form-group-sm">
+                      <div class="yoo-select">
+                        <select id="select_categorias" name="select_categorias" class="form-control">
+                          <option value="null" selected="">--Selecciona categoria--</option>
+                          {% for catego in categorias%}
+                          <option>{{catego}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                 
+                <hr>
+                <div class="yoo-profile-setting-container">
+                  <div class="yoo-height-b55 yoo-height-lg-b55"></div>
+                  
+                  <div class="yoo-height-b15 yoo-height-lg-b15"></div>
+               
+                  <div class="yoo-height-b20 yoo-height-lg-b20"></div>
+                  
+                  <div class="yoo-height-b55 yoo-height-lg-b55"></div>
+                </div><!-- .yoo-profile-setting-container -->
+                <hr>
+                <div class="yoo-height-b20 yoo-height-lg-b20"></div>
+                <div class="yoo-profile-btn-group yoo-style1">
+                  
+                   <button type="submit" name="crear"  
+                          class="yoo-form-btn yoo-style1 yoo-color1"><span>Ejecutar</span>
+                  </button>
+                </div>
+                <div class="yoo-height-b20 yoo-height-lg-b20"></div>
+              </div>
+            </div>
+          </div>
+          </form>
+        </div>
+        <!-- .col -->
+      </div>
+    </div>
+    <div class="yoo-height-b60 yoo-height-lg-b60"></div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
