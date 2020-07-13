@@ -16,15 +16,35 @@ from flask import  request, jsonify, make_response
 #from config import app
 from app import functions
 import json
-from datetime import date
+from datetime import date,datetime
 from app.base.forms import CategoriaForm,TecnologiaForm
 from app.base.models import Categorias,Tecnologias
 from app import db
-
+from pathlib import Path
  
 from . import nocache
  
- 
+from os import listdir
+from os.path import isfile, isdir
+import os
+import platform
+
+def creation_date(path_to_file):
+
+    if platform.system() == 'Windows':
+        return os.path.getctime(path_to_file)
+    else:
+        stat = os.stat(path_to_file)
+        try:
+            return stat.st_birthtime
+        except AttributeError:
+            # We're probably on Linux. No easy way to get creation dates here,
+            # so we'll settle for when its content was last modified.
+            return stat.st_mtime
+
+def ls1(path,pais):    
+    return [obj.replace(".png","").replace("_"+pais,"") for obj in listdir(path) if isfile(path + obj)and pais in obj]
+
     
 @blueprint.route("/precios/", endpoint="precios", methods=["POST"])
 @nocache.nocache
@@ -68,8 +88,44 @@ def colombia():
     
     if not current_user.is_authenticated:
         return redirect(url_for('base_blueprint.login'))
+    path=Path(__file__).parent.absolute()
+    path=str(path).split("/")
+    path=path[:-1]
+    path="/".join(path)
     
-    return render_template('colombia.html',fecha=date.today())
+    fotos=ls1(str(path)+"/base/static/","colombia")
+    print(fotos)
+    item_fotos=list()
+    for item in fotos:
+        
+        fecha_archivo=datetime.fromtimestamp(creation_date(str(path)+"/base/static/"+item+"_colombia.png"))
+        fecha_archivo=str(fecha_archivo).split(" ")[0]
+        item_fotos.append({"foto":item,"fecha":fecha_archivo})
+    return render_template('colombia.html',fecha=date.today(),fotos=item_fotos,pais="colombia")
+
+
+@blueprint.route('/argentina')
+@login_required
+def argentina():
+    
+    if not current_user.is_authenticated:
+        return redirect(url_for('base_blueprint.login'))
+    path=Path(__file__).parent.absolute()
+    path=str(path).split("/")
+    path=path[:-1]
+    path="/".join(path)
+    
+    fotos=ls1(str(path)+"/base/static/","argentina")
+    print(fotos)
+    item_fotos=list()
+    for item in fotos:
+        
+        fecha_archivo=datetime.fromtimestamp(creation_date(str(path)+"/base/static/"+item+"_argentina.png"))
+        fecha_archivo=str(fecha_archivo).split(" ")[0]
+        item_fotos.append({"foto":item,"fecha":fecha_archivo})
+    #item_fotos=set(item_fotos)
+    print(item_fotos)
+    return render_template('colombia.html',fecha=date.today(),fotos=item_fotos,pais="argentina")
 
 
 @blueprint.route('/categorias', methods=['GET', 'POST'])
@@ -147,22 +203,29 @@ def tecnologias():
     if 'nombre' in request.form :
         
         nombre  = request.form['nombre']
-        categoria_id  = request.form['categoria']
-        nombre=nombre.upper()
-        catego = Categorias.query.filter_by(id=categoria_id).first()
-        tecnologias=Tecnologias.query.all()
-        if catego is None:
-            return render_template( 'tecnologias.html',msg_error='Selecciona Categoria',form=tecno_form)
-        tecno = Tecnologias.query.filter_by(nombre=nombre).filter_by(catego_id=categoria_id).first()
-        
-        
-        if tecno:
-            return render_template( 'tecnologias.html', nombre=nombre,categoria=catego,msg_error='Tecnología existe ',form=tecno_form, tecno=tecno)
-        
-        tecno = Tecnologias(nombre,categoria_id)
-        
-        db.session.add(tecno)
-        db.session.commit()
+        nombres=nombre.split(",")
+        todos_nombres=list()
+        for item in nombres:
+            todos_nombres.append(item.rstrip().lstrip())
+        nombres=set(todos_nombres)
+        for nombre in nombres:
+            categoria_id  = request.form['categoria']
+            nombre=nombre.upper()
+            catego = Categorias.query.filter_by(id=categoria_id).first()
+            tecnologias=Tecnologias.query.all()
+            if catego is None:
+                return render_template( 'tecnologias.html',msg_error='Selecciona Categoria',form=tecno_form)
+            tecno = Tecnologias.query.filter_by(nombre=nombre).filter_by(catego_id=categoria_id).first()
+            
+            
+            if tecno:
+                continue
+                return render_template( 'tecnologias.html', nombre=nombre,categoria=catego,msg_error='Tecnología existe ',form=tecno_form, tecno=tecno)
+            
+            tecno = Tecnologias(nombre,categoria_id)
+            
+            db.session.add(tecno)
+            db.session.commit()
         tecnologias=Tecnologias.query.filter_by(catego_id=categoria_id).order_by(Tecnologias.nombre.asc()).all()
         registros=str(len(tecnologias)) +" registros"
         return render_template( 'tecnologias.html',nombre=nombre,registros=registros,tecnologias=tecnologias, msg='Tecnología creada¡¡',form=tecno_form)

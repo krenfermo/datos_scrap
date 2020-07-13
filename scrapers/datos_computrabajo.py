@@ -54,7 +54,7 @@ def navega_page(pagina):
 
 def navega_cada_pagina(pagina,scraper):
      
-    print(pagina)
+    #print(pagina)
      
     
     headers = {
@@ -241,7 +241,7 @@ def cuerpo(URL):
         soup=navega_page(URL)
         
         try:
-            print("entra")    
+            #print("entra")    
             #no_results=soup.find('div', class_='content-errors')
             if "No se ha encontrado ofertas" in str(soup):
                 print("No se ha encontrado ofertas de trabajo con los filtros actuales")
@@ -308,6 +308,8 @@ conexion=Conexion()
 cur = conexion.conn.cursor()   
 cur.execute( "SELECT nombre FROM `categorias`")
 categorias=cur.fetchall()
+print(categorias)
+
 conexion.conn.close()   
 paises=["colombia","argentina"]
 for pais in paises:

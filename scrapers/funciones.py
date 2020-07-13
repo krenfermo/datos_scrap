@@ -10,9 +10,11 @@ from conexion import Conexion
 def get_diccionario(descripcion,tecnologias_todas):
     tecnologias_lista=[]
     for word in  descripcion:
+        text_descripcion=word.upper()
         for tecno in tecnologias_todas: 
-            if tecno in word: 
-                tecnologias_lista.append(tecno)
+            texto_tecno=tecno.upper()
+            if texto_tecno in text_descripcion: 
+                tecnologias_lista.append(texto_tecno)
     tecnologias=Counter(tecnologias_lista).most_common(10)
     #tecnologias=Counter(tecnologias_lista)
     print(dict(tecnologias))
@@ -24,13 +26,14 @@ def crear_grafica(tecnologias,total_empleos,rubro):
     nombres = valores.keys()
     plt.pie(manzanas, labels=nombres, autopct="%0.1f %%")
     plt.title("Los 10 más populares en "+str(total_empleos)+" empleos", bbox={'facecolor':'0.8', 'pad':5})
-    path_img=str(path)+"/webapp/app/base/static/"+str(rubro)+'.png'
+    path_img=str(path)+"/webapp/app/base/static/"+str(rubro.replace(" ","_"))+'.png'
     fig=plt.savefig(path_img)
     plt.close(fig)
 
 def get_info(archivo,rubro,pais):
     rubro_pais=rubro+"_"+pais
     col_list = ["DESCRIPCION", "EXPERIENCIA"]
+    print("llega")
     df=pd.read_csv(archivo, sep=',',encoding="utf-8",usecols=col_list)
     list1=df["EXPERIENCIA"]
     anios_experiencia = Counter(list1)
@@ -61,7 +64,7 @@ def get_info(archivo,rubro,pais):
         if experiencia=="N/D":
             descripcion_nada.append(descr)
         contador+=1
-    archivo_tecnologias=str(Path(__file__).parent.absolute())+diagonal+"dict_"+str(rubro)+".txt"
+    #archivo_tecnologias=str(Path(__file__).parent.absolute())+diagonal+"dict_"+str(rubro)+".txt"
  
     
     #tecnos_df=pd.read_csv(archivo_tecnologias, sep=',',encoding = "utf-8")
@@ -76,14 +79,17 @@ def get_info(archivo,rubro,pais):
     conexion=Conexion()
                 
     cur = conexion.conn.cursor()   
-    cur.execute( "SELECT id FROM `categorias` where nombre='"+categoria+"'")
+    cur.execute( "SELECT id FROM `categorias` where nombre='"+str(categoria).replace("-"," ")+"'")
 
     catego_id=cur.fetchone()
     print(categoria)
     cur.execute( "SELECT nombre FROM `tecnologias` where catego_id="+str(catego_id[0]))
     tecnos=cur.fetchall()
     
-     
+    if tecnos:
+        pass
+    else:
+        return False 
     conexion.conn.close()
     cadena_tecnos=list()
     for tecnologias in tecnos:
@@ -104,6 +110,8 @@ def get_info(archivo,rubro,pais):
     conjunto=df["DESCRIPCION"]
 
     tecnologias=get_diccionario(conjunto,tecnologias_todas)
+    if len(tecnologias)==0:
+        return False
     crear_grafica(tecnologias,len(conjunto),rubro_pais)
 
 
@@ -115,7 +123,7 @@ else:
 path=Path(__file__).parent.absolute()
 
 if __name__ == "__main__":
-    get_info("DATOS_COMPUTRABAJO/2020-07-07/colombia_2020-07-07.csv","MARKETING","colombia")
+    get_info("DATOS_COMPUTRABAJO/2020-07-12/argentina_DISEÑO-DIGITAL_2020-07-12.csv","DISEÑO-DIGITAL","argentina")
     exit() 
     categoria=str(sys.argv[1])
     conexion=Conexion()
