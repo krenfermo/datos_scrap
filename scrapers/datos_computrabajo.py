@@ -52,7 +52,7 @@ def navega_page(pagina):
  
 
 
-def navega_cada_pagina(pagina,scraper):
+def navega_cada_pagina(pagina,scraper,f):
      
     #print(pagina)
      
@@ -70,7 +70,7 @@ def navega_cada_pagina(pagina,scraper):
     page =  scraper.get(pagina, headers=headers)
     #page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
-    extraccion(soup,pagina)
+    extraccion(soup,pagina,f)
      
         
 def genera_archivo(texto)  :
@@ -111,7 +111,7 @@ def quitar_signos(s):
     return s
     
 
-def extraccion(soup,pagina):
+def extraccion(soup,pagina,f):
     try:
         nombre = soup.find('article', id='ContentPlaceHolder1_hidCompany') 
         nombre=nombre.find('h1').text.lstrip().rstrip()
@@ -122,10 +122,6 @@ def extraccion(soup,pagina):
     except:
         return False
        
-
-    
-
-
   
     try:    
         Descripcion = soup.find('ul', class_='p0 m0')
@@ -144,9 +140,7 @@ def extraccion(soup,pagina):
             #print("entra1") 
             Descripcion=Descripcion2
             #print("entra1") 
-            requerimientos=str(Descripcion2_lista[1]).replace("</li>","</li>\n\r")
-            requerimientos=cleanhtml(str(requerimientos))
-            requerimientos=requerimientos.lstrip().rstrip()
+
         else:
            
             Descripcion=Descripcion.text
@@ -155,89 +149,17 @@ def extraccion(soup,pagina):
     except Exception as e:
         #print( "<p>Error: %s</p>" % str(e) )
         #print("error")
-        Descripcion="N/D"
-        requerimientos="N/D"
-     
-    try:
+        Descripcion="N/D"   
         
-        resumen = soup.find_all('ul', class_='p0 m0')
-        
-        
-        Tipodecontrato=str(resumen).split("Tipo de contrato</p>")
-        #print("entra1") 
-        Tipodecontrato=Tipodecontrato[1]            
-        Tipodecontrato=Tipodecontrato.lstrip().rstrip().replace("</p>","").replace("</li>","").replace("<p>","").replace("<li>","").replace('\n', ' ').replace('\r', '')
-        Tipodecontrato=Tipodecontrato.split("<li class=\"tc mt20\">")
-        #print   (Tipodecontrato)
-        Tipodecontrato=Tipodecontrato[0].lstrip()
-        Tipo=Tipodecontrato.split("<p class=\"fw_b fs15 mt10\">Jornada")
-        Tipodecontrato=Tipo[0].lstrip().rstrip()
-         
    
-    except:
-        Tipodecontrato="N/D" 
-        
-        
-    try:
-        resumen = soup.find_all('ul', class_='p0 m0')      
-        
-        jornada=str(resumen).split("Tipo de contrato</p>")
-        #print("entra1") 
-        jornada=jornada[1]            
-        jornada=jornada.lstrip().rstrip().replace("</p>","").replace("</li>","").replace("<p>","").replace("<li>","").replace('\n', ' ').replace('\r', '')
-        jornada=jornada.split("<li class=\"tc mt20\">")
-        #print   (Tipodecontrato)
-        jornada=jornada[0].lstrip()
-        Tipo=jornada.split("<p class=\"fw_b fs15 mt10\">Jornada")
-        jornada=Tipo[1].lstrip().rstrip()
-        jornada=jornada.split("<p class=\"fw_b fs15 mt10\">")[0]
-    except:
-        jornada="N/D"    
-        
-    try:
-          
-            Empresa= soup.find('a', id='urlverofertas').text
-            Empresa=Empresa.lstrip().rstrip()
-            
-    except:
-        Empresa= "N/D"
-    #print("Empresa:") 
-    
-    #print(Empresa)
-    
-    
-    try:
-        publicado=soup.find('p',class_='fc80 mt5').text
-        publicado=publicado.lstrip().rstrip().replace('\n', ' ').replace('\r', '')
-    except:
-        publicado= "N/D"
-        
            
     f.write("\""+pagina.lstrip().rstrip()+"\",")
     f.write("\""+quitar_signos(nombre)+"\",")
-    f.write("\""+quitar_signos(Descripcion)+"\",") 
-        
-    f.write("\""+quitar_signos(requerimientos)+"\",")
-    f.write("\""+quitar_signos(Empresa)+"\",")
-    f.write("\""+quitar_signos(publicado)+"\",")
-    f.write("\""+quitar_signos(Tipodecontrato)+"\",")
-    f.write("\""+quitar_signos(jornada)+"\",")
-    
-    
-    experiencia="N/D"
-    if "de experiencia: 1" in requerimientos: experiencia=1
-    if "de experiencia: 2" in requerimientos: experiencia=2 
-    if "de experiencia: 3" in requerimientos: experiencia=3
-    if "de experiencia: 4" in requerimientos: experiencia=4
-    if "de experiencia: 5" in requerimientos: experiencia=5
-    if "de experiencia: 6" in requerimientos: experiencia=6
-    
-        
-    f.write("\""+str(experiencia)+"\"\n")
+    f.write("\""+str(Descripcion)+"\"\n")
  
         
 
-def cuerpo(URL): 
+def cuerpo(URL,ext_dominio,buscar,f): 
         soup=navega_page(URL)
         
         try:
@@ -295,78 +217,85 @@ def cuerpo(URL):
             
             for item in list_url:
                 scraper = cloudscraper.create_scraper() 
-                navega_cada_pagina(item,scraper)
+                navega_cada_pagina(item,scraper,f)
                 
                 #print (item)
                 
 
 
 #https://www.computrabajo.com.ar/trabajo-de-marketing?p=1&q=marketing
+def computrabajo():
+    conexion=Conexion()
+                
+    cur = conexion.conn.cursor()   
+    cur.execute( "SELECT nombre FROM `categorias`")
+    categorias=cur.fetchall()
+    print(categorias)
 
-conexion=Conexion()
+    conexion.conn.close()   
+    paises=["colombia","argentina"]
+    for pais in paises:
+        for catego in categorias:
+            #if "INGE" in catego[0]:continue
+            #if "MARKE" in catego[0]:continue
+            print(catego[0].replace(" ","-"))
+            buscar=str(catego[0].replace(" ","-"))
+
+            #buscar=str(sys.argv[1]).replace(" ","-")
+            #pais=str(sys.argv[2])
+
+            ext_dominio=""
+            if pais=="colombia":
+                ext_dominio="co"
+            if pais=="argentina":
+                ext_dominio="ar"
+
+            path=Path(__file__).parent.absolute()
+            platform=sys.platform
+            if platform=="linux":
+                diagonal="/"
+            else:
+                diagonal="\\"
+
+            pagina_inicial=1
+            URL="https://www.computrabajo.com."+ext_dominio+"/trabajo-de-"+str(buscar)+"?p="+str(pagina_inicial)+"&q="+str(buscar)   
+
+            formato1 = "%Y-%m-%d"
+            #formato1 = "%Y-%m-%d %H"
+            hoy = datetime.today()
+            hoy = hoy.strftime(formato1)  
+
+
+            path=str(path)+diagonal+"DATOS_COMPUTRABAJO"
+            if os.path.exists(path):
+                pass
+            else:     
+                os.mkdir(path)
+                
+            path=str(path)+diagonal+hoy
+            print(path)
+            if os.path.exists(path):
+                print("CARPETA YA EXISTIA Y NO LA CREA")
+            else:
+                
+                os.mkdir(path)
+                print("CARPETA CREADA")
+
+            archivo_ruta=path+diagonal+pais+"_"+buscar+"_"+hoy+".csv"
+            if os.path.exists(archivo_ruta):
+                
+                f= open(archivo_ruta,"a+")
+            else:
+                f= open(archivo_ruta,"a+")
+                f.write("\"URL\","+"\"NOMBRE\","+"\"DESCRIPCION\"\n")
             
-cur = conexion.conn.cursor()   
-cur.execute( "SELECT nombre FROM `categorias`")
-categorias=cur.fetchall()
-print(categorias)
-
-conexion.conn.close()   
-paises=["colombia","argentina"]
-for pais in paises:
-    for catego in categorias:
-        print(catego[0].replace(" ","-"))
-        buscar=str(catego[0].replace(" ","-"))
-
-        #buscar=str(sys.argv[1]).replace(" ","-")
-        #pais=str(sys.argv[2])
-
-        ext_dominio=""
-        if pais=="colombia":
-            ext_dominio="co"
-        if pais=="argentina":
-            ext_dominio="ar"
-
-        path=Path(__file__).parent.absolute()
-        platform=sys.platform
-        if platform=="linux":
-            diagonal="/"
-        else:
-            diagonal="\\"
-
-        pagina_inicial=1
-        URL="https://www.computrabajo.com."+ext_dominio+"/trabajo-de-"+str(buscar)+"?p="+str(pagina_inicial)+"&q="+str(buscar)   
-
-        formato1 = "%Y-%m-%d"
-        #formato1 = "%Y-%m-%d %H"
-        hoy = datetime.today()
-        hoy = hoy.strftime(formato1)  
-
-
-        path=str(path)+diagonal+"DATOS_COMPUTRABAJO"
-        if os.path.exists(path):
-            pass
-        else:     
-            os.mkdir(path)
             
-        path=str(path)+diagonal+hoy
-        print(path)
-        if os.path.exists(path):
-            print("CARPETA YA EXISTIA Y NO LA CREA")
-        else:
-            
-            os.mkdir(path)
-            print("CARPETA CREADA")
 
-        archivo_ruta=path+diagonal+pais+"_"+buscar+"_"+hoy+".csv"
-        f= open(archivo_ruta,"w+")
-        f.write("\"URL\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"REQUERIMIENTOS\","+"\"EMPRESA\","+"\"PUBLICADO\","+"\"TIPO CONTRATO\","+"\"JORNADA\","+"\"EXPERIENCIA\"\n")
+            cuerpo(URL,ext_dominio,buscar,f)
 
+            f.close() 
 
-        cuerpo(URL)
-
-        f.close() 
-
-        get_info(archivo_ruta,buscar,pais)
+            get_info(archivo_ruta,buscar,pais)
 
 
 

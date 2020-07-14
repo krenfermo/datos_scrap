@@ -24,7 +24,7 @@ def get_diccionario(descripcion,tecnologias_todas):
                 tecnologias_lista.append(texto_tecno)
     tecnologias=Counter(tecnologias_lista).most_common(10)
     #tecnologias=Counter(tecnologias_lista)
-    print(dict(tecnologias))
+   
     return(dict(tecnologias))
 
 def crear_grafica(tecnologias,total_empleos,rubro):
@@ -33,56 +33,29 @@ def crear_grafica(tecnologias,total_empleos,rubro):
     nombres = valores.keys()
     plt.pie(manzanas, labels=nombres, autopct="%0.1f %%")
     plt.title("Los 10 más populares en "+str(total_empleos)+" empleos", bbox={'facecolor':'0.8', 'pad':5})
-    path_img=str(path)+"/webapp/app/base/static/"+str(rubro.replace(" ","-"))+'.png'
+    try:
+        path_img=str(path)+"/webapp/app/base/static/"+str(rubro.replace(" ","-"))+'.png'
+    
+    except Exception as ex:
+        print(ex)
+    
     fig=plt.savefig(path_img)
     plt.close(fig)
+    #print(nombres)
 
 def get_info(archivo,rubro,pais):
     rubro_pais=rubro+"_"+pais
-    col_list = ["DESCRIPCION", "EXPERIENCIA"]
-    print("llega")
+    col_list = ["DESCRIPCION"]
+    #print(archivo)
     df=pd.read_csv(archivo, sep=',',encoding="utf-8",usecols=col_list)
-    list1=df["EXPERIENCIA"]
-    anios_experiencia = Counter(list1)
+    #list1=df["EXPERIENCIA"]
+    #anios_experiencia = Counter(list1)
 
     df=df.drop_duplicates()
 
-    descripcion_todas=[]
-    descripcion_1=[]
-    descripcion_2=[]
-    descripcion_3=[]
-    descripcion_4=[]
-    descripcion_5=[]
-    descripcion_6=[]
-    descripcion_nada=[]
-    contador=0
-
-    for descr in  df["DESCRIPCION"]:
-      
-        experiencia=str(df["EXPERIENCIA"].values[contador])
-        if experiencia=="1":
-            descripcion_1.append(descr)
-        if experiencia=="2" or experiencia=="3":
-            descripcion_2.append(descr)
-        if experiencia=="4" or  experiencia=="5":
-            descripcion_3.append(descr)
-        if experiencia=="6":
-            descripcion_4.append(descr)
-        if experiencia=="N/D":
-            descripcion_nada.append(descr)
-        contador+=1
-    #archivo_tecnologias=str(Path(__file__).parent.absolute())+diagonal+"dict_"+str(rubro)+".txt"
- 
-    
-    #tecnos_df=pd.read_csv(archivo_tecnologias, sep=',',encoding = "utf-8")
-    #tecnologias=list(tecnos_df.columns)
-    
-    
-    #tecnologias= [x.replace("\n","").lstrip().rstrip() for x in tecnologias]
-
-    #tecnologias=map(str.strip, tecnologias)
-    
+  
     categoria=rubro
+
     for item in sys.path:
             if "datos_scrap" in item:
                 carpeta=item.replace("webapp","")
@@ -126,6 +99,7 @@ def get_info(archivo,rubro,pais):
     tecnologias=get_diccionario(conjunto,tecnologias_todas)
     if len(tecnologias)==0:
         return False
+    print("va graficar")
     crear_grafica(tecnologias,len(conjunto),rubro_pais)
 
 
