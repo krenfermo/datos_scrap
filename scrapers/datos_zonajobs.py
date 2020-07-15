@@ -33,7 +33,8 @@ def paginas2(soup):
     except:
           
         print('error pagina') 
-        contador+=1                
+        return "error"
+     
         
         
         

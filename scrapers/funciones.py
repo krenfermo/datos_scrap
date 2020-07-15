@@ -17,9 +17,9 @@ def module_from_file(module_name, file_path):
 def get_diccionario(descripcion,tecnologias_todas):
     tecnologias_lista=[]
     for word in  descripcion:
-        text_descripcion=word.upper()
+        text_descripcion=str(word).upper()
         for tecno in tecnologias_todas: 
-            texto_tecno=tecno.upper()
+            texto_tecno=str(tecno).upper()
             if texto_tecno in text_descripcion: 
                 tecnologias_lista.append(texto_tecno)
     tecnologias=Counter(tecnologias_lista).most_common(10)

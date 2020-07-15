@@ -1,9 +1,13 @@
 from datos_computrabajo import computrabajo
 from datos_zonajobs import zonajobs
-
-
+import sys
+#if sys.argv[1]:
+zona=0
 try:
-    computrabajo()
+    if zona==1:
+       pass
+    else:
+       computrabajo()
     #pass
 except Exception as ex:
     print(ex)
@@ -17,4 +21,5 @@ try:
             
 except Exception as ex:
     print(ex)
+
 print("TERMINA")
