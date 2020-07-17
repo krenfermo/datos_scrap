@@ -56,7 +56,7 @@ def get_info(archivo,rubro,pais):
     #anios_experiencia = Counter(list1)
 
     df=df.drop_duplicates()
-
+    df['DESCRIPCION'] = df['DESCRIPCION'].replace(['"'],'')
  
     categoria=rubro
 
@@ -98,7 +98,7 @@ def get_info(archivo,rubro,pais):
     
     #tecnologias_todas=set(tecnologias) 
     
-    conjunto=df["DESCRIPCION"].replace("\"","")
+    conjunto=df["DESCRIPCION"]
 
     tecnologias=get_diccionario(conjunto,tecnologias_todas)
     
