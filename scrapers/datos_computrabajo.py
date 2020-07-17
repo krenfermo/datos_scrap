@@ -296,6 +296,6 @@ def computrabajo():
             f.close() 
 
             get_info(archivo_ruta,buscar,pais)
-
-
+if __name__ == "__main__":
+    computrabajo()
 

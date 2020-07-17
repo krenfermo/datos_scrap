@@ -111,7 +111,8 @@ def colombia():
         fecha_archivo=datetime.fromtimestamp(creation_date(str(path)+"/base/static/"+item+"_colombia.png"))
         fecha_archivo=str(fecha_archivo).split(" ")[0]
         item_fotos.append({"foto":item,"fecha":fecha_archivo})
-    return render_template('colombia.html',fecha=date.today(),fotos=item_fotos,pais="colombia",nombre="Colombia")
+    print(item_fotos)
+    return render_template('colombia.html',fotos=item_fotos,pais="colombia",nombre="Colombia")
 
 
 @blueprint.route('/argentina')
@@ -135,7 +136,7 @@ def argentina():
         item_fotos.append({"foto":item,"fecha":fecha_archivo})
     #item_fotos=set(item_fotos)
     print(item_fotos)
-    return render_template('colombia.html',fecha=date.today(),fotos=item_fotos,pais="argentina",nombre="Argentina")
+    return render_template('colombia.html',fotos=item_fotos,pais="argentina",nombre="Argentina")
 
 
 
@@ -176,8 +177,14 @@ def configuracion():
         
         for item in archivos:
             if "colombia" in item:
+                print ("AQUIIII COLOMBIA")
+                print(item)
+                continue
                 baz.get_info(item,select_categorias,"colombia")    
             if "argentina" in item:
+                print ("AQUIIII argentina")
+                print(item)
+                continue
                 baz.get_info(item,select_categorias,"argentina")
             print("llama")
             print("actegoria:"+select_categorias)

@@ -15,16 +15,20 @@ def module_from_file(module_name, file_path):
     return module
 
 def get_diccionario(descripcion,tecnologias_todas):
+    
     tecnologias_lista=[]
     for word in  descripcion:
         text_descripcion=str(word).upper()
         for tecno in tecnologias_todas: 
             texto_tecno=str(tecno).upper()
+            #print(texto_tecno)
+            #print (text_descripcion)
+            
             if texto_tecno in text_descripcion: 
                 tecnologias_lista.append(texto_tecno)
     tecnologias=Counter(tecnologias_lista).most_common(10)
     #tecnologias=Counter(tecnologias_lista)
-   
+    
     return(dict(tecnologias))
 
 def crear_grafica(tecnologias,total_empleos,rubro):
@@ -53,7 +57,7 @@ def get_info(archivo,rubro,pais):
 
     df=df.drop_duplicates()
 
-  
+ 
     categoria=rubro
 
     for item in sys.path:
@@ -91,12 +95,14 @@ def get_info(archivo,rubro,pais):
     
     #print(cd_tecnos)
     tecnologias_todas=set(cd_tecnos) 
-    #print(tecnologias)
+    
     #tecnologias_todas=set(tecnologias) 
     
-    conjunto=df["DESCRIPCION"]
+    conjunto=df["DESCRIPCION"].replace("\"","")
 
     tecnologias=get_diccionario(conjunto,tecnologias_todas)
+    
+    
     if len(tecnologias)==0:
         return False
     print("va graficar")
@@ -111,7 +117,8 @@ else:
 path=Path(__file__).parent.absolute()
 
 if __name__ == "__main__":
-    get_info("DATOS_COMPUTRABAJO/2020-07-12/colombia_MARKETING_2020-07-12.csv","MARKETING","colombia")
+
+    get_info("DATOS_COMPUTRABAJO/2020-07-14/colombia_INGENIERO-EN-SISTEMAS_2020-07-14.csv","INGENIERO-EN-SISTEMAS","colombia")
     exit() 
     categoria=str(sys.argv[1])
     conexion=Conexion()
