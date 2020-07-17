@@ -177,14 +177,11 @@ def configuracion():
         
         for item in archivos:
             if "colombia" in item:
-                print ("AQUIIII COLOMBIA")
-                print(item)
-                continue
+        
+        
                 baz.get_info(item,select_categorias,"colombia")    
             if "argentina" in item:
-                print ("AQUIIII argentina")
-                print(item)
-                continue
+         
                 baz.get_info(item,select_categorias,"argentina")
             print("llama")
             print("actegoria:"+select_categorias)
