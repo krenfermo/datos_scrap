@@ -138,7 +138,7 @@ def extraccion(soup,pagina,f):
             #print("entra1") 
             Descripcion2=Descripcion2.lstrip().rstrip()
             #print("entra1") 
-            Descripcion=Descripcion2
+            Descripcion=Descripcion2.replace("\"","")
             #print("entra1") 
 
         else:

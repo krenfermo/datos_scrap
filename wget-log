@@ -1,0 +1,6 @@
+--2020-07-18 00:49:35--  https://www.linkedin.com/jobs/search/?f_TPR=r86400
+Resolving www.linkedin.com (www.linkedin.com)... 13.107.42.14, 2620:1ec:21::14
+Connecting to www.linkedin.com (www.linkedin.com)|13.107.42.14|:443... connected.
+HTTP request sent, awaiting response... 999 Request denied
+2020-07-18 00:49:35 ERROR 999: Request denied.
+
