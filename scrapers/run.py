@@ -1,5 +1,6 @@
 from datos_computrabajo import computrabajo
 from datos_zonajobs import zonajobs
+from datos_linkedin import linkedin
 import sys
 #if sys.argv[1]:
 zona=0
@@ -22,4 +23,15 @@ try:
 except Exception as ex:
     print(ex)
 
+
+try:
+    job=linkedin()
+    if job==0:
+        pass
+    else:
+        job=linkedin()
+            
+except Exception as ex:
+    print(ex)
+    
 print("TERMINA")

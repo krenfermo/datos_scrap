@@ -179,12 +179,12 @@ def configuracion():
             if "colombia" in item:
         
         
-                baz.get_info(item,select_categorias,"colombia")    
+                llama=baz.get_info(item,select_categorias,"colombia")    
             if "argentina" in item:
          
-                baz.get_info(item,select_categorias,"argentina")
+                llama=baz.get_info(item,select_categorias,"argentina")
             print("llama")
-            print("actegoria:"+select_categorias)
+            print("categoria:"+select_categorias)
             #exit()
             
         #print(dir(baz))

@@ -10,6 +10,7 @@ import cloudscraper
 import codecs
 from funciones import get_info
 from conexion import Conexion
+import os
 
  
 
@@ -37,8 +38,8 @@ def quitar_signos(s):
 def paginas2(soup):
      
     try:
-        print(soup) 
-        exit()
+        #print(soup) 
+        #exit()
         Total_pages = soup.find('span', class_='results-context-header__job-count').text.split(" ")[0] 
     #Total_pages =driver.find_element_by_xpath("display-flex t-12 t-black--light t-normal").text.split(" ")[0] 
     except Exception as ex:
@@ -61,35 +62,38 @@ def paginas2(soup):
 
 
 
-def cuerpo(Total_paginas,f,trabajo,location):
+def cuerpo(Total_paginas,f,trabajo,location,session_requests):
     for pages in range(0,Total_paginas) :
             pagina=int(pages)*25
-            print("start"+str(pagina))
+            #print("start"+str(pagina))
             URL=  "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?f_TPR=r86400&keywords="+str(trabajo)+"&location="+str(location)+"&f_TP=1&redirect=true&position=1&pageNum=0&start="+str(pagina)
-            print("https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?f_TPR=r86400&keywords="+str(trabajo)+"&location="+str(location)+"&f_TP=1&redirect=true&position=1&pageNum=0&start="+str(pagina))
+            #print("https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?f_TPR=r86400&keywords="+str(trabajo)+"&location="+str(location)+"&f_TP=1&redirect=true&position=1&pageNum=0&start="+str(pagina))
             # Get login csrf token
-            result = session_requests.get(URL, allow_redirects=True)
-
+            headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.90 Safari/537.36'}
+            result = session_requests.get(URL, headers=headers)
+            #print(result)
 
             #guardo en soup todo el codigo fuente para extraer los valores de la sesion
             soup = BeautifulSoup(result.content, 'html.parser')
+            #print (soup)
             trabajos=soup.find_all('li')
             lista_trabajos=[]
             for item in trabajos:
-                #print(item.find('a')["href"])
+                #print(item)
                 lista_trabajos.append(item.find('a')["href"])
             
-            
+            #print(lista_trabajos)
+            #return False
             for item in lista_trabajos:
-                time.sleep(1)                
-                navega_cada_pagina_2(item)
+                #time.sleep(1)                
+                navega_cada_pagina_2(item,f)
                  
                 
                     
               
               
 
-def navega_cada_pagina_2(pagina):    
+def navega_cada_pagina_2(pagina,f):    
     
     #print(pagina)  
     headers = {
@@ -128,7 +132,7 @@ def navega_cada_pagina_2(pagina):
  
   
     #jobs-top-card__bullet 
-    time.sleep(1)
+    #time.sleep(1)
     
     
     f.write("\""+pagina.lstrip().rstrip()+"\",")
@@ -221,9 +225,10 @@ def linkedin():
             else:
                 f= open(archivo_ruta,"a+")
                 f.write("\"URL\","+"\"NOMBRE\","+"\"DESCRIPCION\"\n")
-            cuerpo(Total_paginas,f,trabajo,location)
+            cuerpo(Total_paginas,f,trabajo,location,session_requests)
+            
             f.close()
-            get_info(archivo_ruta,buscar,pais)
+            get_info(archivo_ruta,trabajo,pais)
     return 0
 if __name__ == "__main__":
     linkedin()
