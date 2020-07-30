@@ -79,7 +79,7 @@ def cuerpo(trabajo,f,scraper):
         display.start()
         try:
             
-            driver = webdriver.Chrome()
+            driver = webdriver.chrome()
         except:
             print ("error driver")
             return 1
