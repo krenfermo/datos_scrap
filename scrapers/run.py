@@ -4,6 +4,20 @@ from datos_linkedin import linkedin
 from datos_adlatina import adlatina
 import sys
 #if sys.argv[1]:
+
+try:
+    job=adlatina()
+    if job==0:
+        pass
+    else:
+        job=adlatina()
+
+except Exception as ex:
+    print(ex)
+
+
+
+
 zona=0
 try:
     if zona==1:
@@ -36,14 +50,4 @@ except Exception as ex:
     print(ex)
 
 
-try:
-    job=adlatina()
-    if job==0:
-        pass
-    else:
-        job=adlatina()
-            
-except Exception as ex:
-    print(ex)
-    
 print("TERMINA")
