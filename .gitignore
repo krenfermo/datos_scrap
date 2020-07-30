@@ -2,3 +2,4 @@ env/*
 *.*~
 *.pyc
 scrapers/DATOS_COMPUTRABAJO/*
+scrapers/__pycache__/*
