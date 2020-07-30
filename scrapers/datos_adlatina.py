@@ -14,6 +14,9 @@ from selenium import webdriver
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
+from pyvirtualdisplay import Display
+from selenium import webdriver
+
 
 #from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 
@@ -72,14 +75,14 @@ def cuerpo(trabajo,f,scraper):
         #driver = webdriver.Firefox()
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
+        display = Display(visible=0, size=(800, 600))
+        display.start()
         try:
-            path=Path(__file__).parent.absolute()
-            print(os.path.abspath("chromedriver"))
-           
-            driver = webdriver.Chrome(executable_path=os.path.abspath("chromedriver"),   chrome_options=options)
+            
+            driver = webdriver.Firefox()
         except:
             print ("error driver")
-            pass
+            return 1
         #binary = FirefoxBinary('/usr/bin/firefox')
         #browser = webdriver.Firefox(firefox_binary=binary)
         driver.get(URL)
@@ -121,7 +124,7 @@ def cuerpo(trabajo,f,scraper):
             articulo=driver.find_element_by_class_name('fancybox-content')
             nombre=articulo.find_element_by_tag_name('h1')
             
-            print(nombre.text)
+            #print(nombre.text)
             descripcion=articulo.find_element_by_tag_name('p')
             #print(descripcion.text)
             #print(parafo)

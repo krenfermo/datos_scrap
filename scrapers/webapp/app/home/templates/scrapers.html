@@ -10,7 +10,7 @@
     <div class="yoo-height-b30 yoo-height-lg-b30"></div>
     <div class="container">
       <div class="yoo-uikits-heading">
-        <h2 class="yoo-uikits-title">Configuración</h2>
+        <h2 class="yoo-uikits-title">EJECUTAR SCRAPERS</h2>
       </div>
     </div>
     <div class="yoo-height-b30 yoo-height-lg-b30"></div>
@@ -30,25 +30,13 @@
                     </div>
                      
                 {% endif %} 
-                      <h2 class="yoo-profile-setting-title">Ejecutar categorías</h2>
-                      <div class="yoo-profile-setting-subtitle">Selecciona la categoría para actualizar las estadísticas.</div>
+                      <h2 class="yoo-profile-setting-title">Ejecutar Scrapers</h2>
+                      {{ result2}}
                     </div>
                   </div>
                   <form method="post" action="" class="yoo-form yoo-style1">
                   <div class="yoo-height-b20 yoo-height-lg-b20"></div>
-                  <div class="yoo-form-field-wrap yoo-style1">
-                    <label class="yoo-form-field-label yoo-type1">Categorías</label>
-                    <div class="input-group form-group-sm">
-                      <div class="yoo-select">
-                        <select id="select_categorias" name="select_categorias" class="form-control">
-                          <option value="null" selected="">--Selecciona categoria--</option>
-                          {% for catego in categorias%}
-                          <option>{{catego}}</option>
-                          {% endfor %}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+               
                  
                 <hr>
                 <div class="yoo-profile-setting-container">
@@ -64,7 +52,7 @@
                 <div class="yoo-height-b20 yoo-height-lg-b20"></div>
                 <div class="yoo-profile-btn-group yoo-style1">
                   
-                   <button type="submit" name="crear"  
+                   <button type="submit" name="scrap"  
                           class="yoo-form-btn yoo-style1 yoo-color1"><span>Ejecutar</span>
                   </button>
                 </div>

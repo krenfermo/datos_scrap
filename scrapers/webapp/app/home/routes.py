@@ -31,7 +31,21 @@ import platform
 from os import remove
 
 import importlib.util
+import os, time
+import platform
 
+def creation_date(path_to_file):
+
+    if platform.system() == 'Windows':
+        return os.path.getctime(path_to_file)
+    else:
+        stat = os.stat(path_to_file)
+        try:
+            return stat.st_birthtime
+        except AttributeError:
+            # We're probably on Linux. No easy way to get creation dates here,
+            # so we'll settle for when its content was last modified.
+            return stat.st_mtime
 def module_from_file(module_name, file_path):
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     module = importlib.util.module_from_spec(spec)
@@ -55,33 +69,7 @@ def creation_date(path_to_file):
 def ls1(path,pais):    
     return [obj.replace(".png","").replace("_"+pais,"") for obj in listdir(path) if isfile(path + obj)and pais in obj]
 
-    
-@blueprint.route("/precios/", endpoint="precios", methods=["POST"])
-@nocache.nocache
-def route_precios():    
-    #if  current_user.is_authenticated:
-        codigo=request.form['codigo'] 
-        precios=functions.f_precios(codigo)
-        registros=int(len(precios['precios']))
-         
-        return render_template( "precios.html",info=precios['precios'],registros=registros )
-
-
-@blueprint.route("/precios_cambiados/", endpoint="precios_cambiados", methods=["POST"])
-@nocache.nocache
-def route_precios_cambiados():    
-    #if  current_user.is_authenticated:
-        codigo=request.form['codigo'] 
-        precios=functions.f_precios_cambiados(codigo)
-        registros=int(len(precios['precios']))
-         
-        return render_template( "precios_cambiados.html",info=precios['precios'],registros=registros )
-
-    
-
-
-
-
+ 
 @blueprint.route('/index')
 @login_required
 def index():
@@ -111,7 +99,7 @@ def colombia():
         fecha_archivo=datetime.fromtimestamp(creation_date(str(path)+"/base/static/"+item+"_colombia.png"))
         fecha_archivo=str(fecha_archivo).split(" ")[0]
         item_fotos.append({"foto":item,"fecha":fecha_archivo})
-    print(item_fotos)
+    
     return render_template('colombia.html',fotos=item_fotos,pais="colombia",nombre="Colombia")
 
 
@@ -127,7 +115,7 @@ def argentina():
     path="/".join(path)
     
     fotos=ls1(str(path)+"/base/static/","argentina")
-    print(fotos)
+    #print(fotos)
     item_fotos=list()
     for item in fotos:
         
@@ -135,10 +123,45 @@ def argentina():
         fecha_archivo=str(fecha_archivo).split(" ")[0]
         item_fotos.append({"foto":item,"fecha":fecha_archivo})
     #item_fotos=set(item_fotos)
-    print(item_fotos)
+    #print(item_fotos)
     return render_template('colombia.html',fotos=item_fotos,pais="argentina",nombre="Argentina")
 
 
+
+
+@blueprint.route('/scrapers', methods=['GET', 'POST'])
+@login_required
+def scrapers():
+    import locale
+    locale.setlocale(locale.LC_TIME,'es_CR.UTF-8')
+    date_format = locale.nl_langinfo(locale.D_FMT)
+    
+    result2=""
+    path=Path(__file__).parent.absolute()
+    path=str(path).replace("webapp/app/home","")
+    fecha=os.listdir(str(path)+"DATOS_COMPUTRABAJO/")
+    
+    leng=len(fecha)
+    carpeta=max(fecha)
+    d = time.ctime(os.path.getmtime(str(path)+"DATOS_COMPUTRABAJO/"+str(carpeta)))
+    
+    result2="Actualizados : %s" % d
+    
+    if 'scrap' in request.form :
+        print ("lanza scrapers")
+        
+        activate_this_file = "app/home/activar_env.py"
+        import subprocess
+
+        result2 = subprocess.run(['pwd'], stdout=subprocess.PIPE)
+                
+        path=result2.stdout.decode('utf-8').replace("/webapp\n","/webapp/")
+        #print(path+activate_this_file)
+        activar=path+activate_this_file
+        #execfile(activate_this_file, dict(__file__=activate_this_file))
+        exec(compile(open(activar, "rb").read(), activar, 'exec'),        dict(__file__=activar))
+    return render_template( 'scrapers.html',result2=result2)
+ 
 
 @blueprint.route('/configuracion', methods=['GET', 'POST'])
 @login_required
@@ -183,12 +206,7 @@ def configuracion():
             if "argentina" in item:
          
                 llama=baz.get_info(item,select_categorias,"argentina")
-            print("llama")
-            print("categoria:"+select_categorias)
-            #exit()
-            
-        #print(dir(baz))
-        
+
         
     categorias = Categorias.query.order_by(Categorias.nombre.asc()).all()
     return render_template( 'configuracion.html',categorias=categorias,msg_error=msg_error)
