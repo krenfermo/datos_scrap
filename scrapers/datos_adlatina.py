@@ -49,7 +49,7 @@ def paginas2(soup):
         
         
         
-    print(str(Total_pages)+ " resultados")
+    #print(str(Total_pages)+ " resultados")
  
         
     Total_pages=int(Total_pages)/25
@@ -69,7 +69,7 @@ def cuerpo(trabajo,f,scraper):
 
    
         URL="http://www.adlatina.com.ar/empleos/?q="+str(trabajo)+"&fecha=30"
-        print(URL)
+        #print(URL)
         # Get login csrf token
         #result = scraper.get(URL, allow_redirects=True)
         #driver = webdriver.Firefox()
@@ -106,7 +106,7 @@ def cuerpo(trabajo,f,scraper):
             # Calculate new scroll height and compare with last scroll height
             new_height = driver.execute_script("return document.documentElement.scrollHeight")
             if new_height == last_height:
-               print("break")
+               #print("break")
                break
             last_height = new_height
         #guardo en soup todo el codigo fuente para extraer los valores de la sesion
@@ -157,12 +157,13 @@ def cuerpo(trabajo,f,scraper):
 
 
 def adlatina():
+    print("adlatina")
     conexion=Conexion()
                 
     cur = conexion.conn.cursor()   
     cur.execute( "SELECT nombre FROM `categorias`")
     categorias=cur.fetchall()
-    print(categorias)
+    #print(categorias)
 
     conexion.conn.close()   
     paises=["argentina"]
@@ -171,7 +172,7 @@ def adlatina():
             #if "DISE" in catego[0]:continue
             #if "MARKE" in catego[0]:continue
             
-            print(catego[0].replace(" ","-"))
+            #print(catego[0].replace(" ","-"))
             trabajo=str(catego[0].replace(" ","-"))
 
             scraper = cloudscraper.create_scraper() 
@@ -195,13 +196,14 @@ def adlatina():
                 os.mkdir(path)
                 
             path=str(path)+diagonal+hoy
-            print(path)
+            #print(path)
             if os.path.exists(path):
-                print("CARPETA YA EXISTIA Y NO LA CREA")
+                #print("CARPETA YA EXISTIA Y NO LA CREA")
+                pass
             else:
                 
                 os.mkdir(path)
-                print("CARPETA CREADA")
+                #print("CARPETA CREADA")
                 
             archivo_ruta=path+diagonal+pais+"_"+trabajo+"_"+hoy+".csv"
             if os.path.exists(archivo_ruta):

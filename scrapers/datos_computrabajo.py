@@ -26,7 +26,7 @@ def my_round(i):
 
 def navega_page(pagina):
      
-    print(pagina)
+    #print(pagina)
     #headers = {'User-Agent': 'Mozilla/5.0'}
     headers = {
             "Upgrade-Insecure-Requests":"1",
@@ -166,19 +166,19 @@ def cuerpo(URL,ext_dominio,buscar,f):
             #print("entra")    
             #no_results=soup.find('div', class_='content-errors')
             if "No se ha encontrado ofertas" in str(soup):
-                print("No se ha encontrado ofertas de trabajo con los filtros actuales")
+                #print("No se ha encontrado ofertas de trabajo con los filtros actuales")
                 return False
             Total_pages = soup.find('div', class_='breadtitle_mvl')
             
             Total_pages=Total_pages.find('span').text.replace(",","")
              
-            print(str(Total_pages)+" resultados")
+            #print(str(Total_pages)+" resultados")
             Total_pages=int(Total_pages)/20
             #print(Total_pages)
             Total_pages=my_round(Total_pages+0.5)
 
 
-            print(str(Total_pages) + " paginas" )
+            #print(str(Total_pages) + " paginas" )
             
             
             
@@ -191,7 +191,7 @@ def cuerpo(URL,ext_dominio,buscar,f):
             list_url=list()
             URL2="https://www.computrabajo.com."+ext_dominio+"/trabajo-de-"+str(buscar)+"?p="+str(pages)+"&q="+str(buscar)   
  
-            print("PAGINA:"+ str(pages))
+            #print("PAGINA:"+ str(pages))
             soup =  navega_page(URL2)
  
             
@@ -208,7 +208,7 @@ def cuerpo(URL,ext_dominio,buscar,f):
                 
                 #print(a_href)
                 if a_href["href"]==None:
-                    print("continua")
+                    #print("continua")
                     continue        
                
                 list_url.append("https://www.computrabajo.com."+ext_dominio+str(a_href["href"]))
@@ -225,12 +225,13 @@ def cuerpo(URL,ext_dominio,buscar,f):
 
 #https://www.computrabajo.com.ar/trabajo-de-marketing?p=1&q=marketing
 def computrabajo():
+    print("computrbajo")
     conexion=Conexion()
                 
     cur = conexion.conn.cursor()   
     cur.execute( "SELECT nombre FROM `categorias`")
     categorias=cur.fetchall()
-    print(categorias)
+    #print(categorias)
 
     conexion.conn.close()   
     paises=["colombia","argentina"]
@@ -238,7 +239,7 @@ def computrabajo():
         for catego in categorias:
             #if "INGE" in catego[0]:continue
             #if "MARKE" in catego[0]:continue
-            print(catego[0].replace(" ","-"))
+            #print(catego[0].replace(" ","-"))
             buscar=str(catego[0].replace(" ","-"))
 
             #buscar=str(sys.argv[1]).replace(" ","-")
@@ -273,13 +274,14 @@ def computrabajo():
                 os.mkdir(path)
                 
             path=str(path)+diagonal+hoy
-            print(path)
+            #print(path)
             if os.path.exists(path):
-                print("CARPETA YA EXISTIA Y NO LA CREA")
+                #print("CARPETA YA EXISTIA Y NO LA CREA")
+                pass
             else:
                 
                 os.mkdir(path)
-                print("CARPETA CREADA")
+                #print("CARPETA CREADA")
 
             archivo_ruta=path+diagonal+pais+"_"+buscar+"_"+hoy+".csv"
             if os.path.exists(archivo_ruta):

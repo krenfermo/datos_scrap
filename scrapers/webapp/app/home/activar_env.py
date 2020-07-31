@@ -8,8 +8,7 @@ python=path.replace("scrapers/","")
 src_bash=python+"/scrapers/webapp/app/home/activar.sh"
 python = python +"/env/bin/python3"
 #activate=python.replace("python3","activate")
-print(python)
-print (script)
+
 #result2 = subprocess.run([python,script])
 #result2 = subprocess.run([python,script])
 

@@ -105,7 +105,7 @@ def get_info(archivo,rubro,pais):
     
     if len(tecnologias)==0:
         return False
-    print("va graficar")
+    #print("va graficar")
     crear_grafica(tecnologias,len(conjunto),rubro_pais)
 
 
@@ -119,36 +119,5 @@ path=Path(__file__).parent.absolute()
 if __name__ == "__main__":
 
     get_info("DATOS_COMPUTRABAJO/2020-07-14/colombia_INGENIERO-EN-SISTEMAS_2020-07-14.csv","INGENIERO-EN-SISTEMAS","colombia")
-    exit() 
-    categoria=str(sys.argv[1])
-    conexion=Conexion()
-                
-    cur = conexion.conn.cursor()   
-    cur.execute( "SELECT id FROM `categorias` where nombre='"+categoria+"'")
-    catego_id=cur.fetchone()
-    
-    cur.execute( "SELECT nombre FROM `tecnologias` where catego_id="+str(catego_id[0]))
-    tecnos=cur.fetchall()
-    
-     
-    conexion.conn.close()
-    cadena_tecnos=list()
-    for tecnologias in tecnos:
-        cadena_tecnos.append( [x.replace("\n","").lstrip().rstrip() for x in tecnologias])
-    
-    
-    cd_tecnos=list()   
-    for item in cadena_tecnos:
-        tec=item[0]
-        cd_tecnos.append(tec)
-        
-    
-    print(cd_tecnos)
-    tecnologias_todas=set(cd_tecnos) 
-    print(tecnologias_todas)
     exit()
-    
-    #archivo=str(sys.argv[1])
-    #rubro=str(sys.argv[2])
-    #pais=str(sys.argv[3])
    

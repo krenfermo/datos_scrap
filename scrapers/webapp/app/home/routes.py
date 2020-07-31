@@ -92,7 +92,7 @@ def colombia():
     path="/".join(path)
     
     fotos=ls1(str(path)+"/base/static/","colombia")
-    print(fotos)
+    #print(fotos)
     item_fotos=list()
     for item in fotos:
         
@@ -187,7 +187,7 @@ def configuracion():
         paises=["colombia","argentina"]
         for pais in paises:
             archivo=str(path)+"DATOS_COMPUTRABAJO/"+carpeta+"/"+pais+"_"+str(select_categorias).replace(" ","-")+"_"+carpeta+".csv"
-            print(select_categorias)
+            #print(select_categorias)
             if os.path.exists(archivo):
                 archivos.append(archivo)
         
@@ -253,7 +253,7 @@ def route_borra_catego(nombre):
         for pais in paises:
             archivo=str(path)+str(nombre).replace(" ","-")+"_"+pais+".png"
             if os.path.exists(archivo):
-                print(archivo)
+                #print(archivo)
                 remove(archivo)
         
 
@@ -338,7 +338,7 @@ def tecnologias():
 def route_template(template):
 
     try:
-        print(requests)
+        #print(requests)
  
         if template=='tables.html':
             #info = requests.get('http://localhost:5000/links_rotos/')
@@ -388,7 +388,7 @@ def route_template(template):
          
             info= {"precios_cambiados": [{"id": x[0], "precio": x[1], "fecha_actualizacion": x[2], "bodega": x[3], "codigo": x[4], "codigo_prov": x[5], "costo": x[6], "precio_prov": x[7]} for x in rotos]}
       
-            print(info['precios_cambiados'])
+            #print(info['precios_cambiados'])
             registros=int(len(info['precios_cambiados']))
             return render_template( template,info=info['precios_cambiados'],registros=registros )  
         

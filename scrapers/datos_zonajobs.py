@@ -38,7 +38,7 @@ def paginas2(soup):
         
         
         
-    print(str(Total_pages)+ " resultados")
+    #print(str(Total_pages)+ " resultados")
  
         
     Total_pages=int(Total_pages)/25
@@ -57,10 +57,10 @@ def paginas2(soup):
 def cuerpo(Total_paginas,trabajo,f,scraper):
     for pages in range(1,Total_paginas+1) :
              
-            print("pagina: "+str(pages))
+            #print("pagina: "+str(pages))
             
             URL="https://www.zonajobs.com.ar/ofertas-de-trabajo-"+str(trabajo)+"-pagina-"+str(pages)+".html"
-            print(URL)
+            #print(URL)
             # Get login csrf token
             result = scraper.get(URL, allow_redirects=True)
 
@@ -167,12 +167,13 @@ def navega_cada_pagina_2(pagina,f):
 
 
 def zonajobs():
+    print("zonajobs")
     conexion=Conexion()
                 
     cur = conexion.conn.cursor()   
     cur.execute( "SELECT nombre FROM `categorias`")
     categorias=cur.fetchall()
-    print(categorias)
+    #print(categorias)
 
     conexion.conn.close()   
     paises=["argentina"]
@@ -181,7 +182,7 @@ def zonajobs():
             #if "DISE" in catego[0]:continue
             #if "MARKE" in catego[0]:continue
             
-            print(catego[0].replace(" ","-"))
+            #print(catego[0].replace(" ","-"))
             trabajo=str(catego[0].replace(" ","-"))
 
             #trabajo=sys.argv[1].replace(" ","-")
@@ -189,7 +190,7 @@ def zonajobs():
               
             LOGIN_URL="https://www.zonajobs.com.ar/ofertas-de-trabajo-"+str(trabajo)+"-pagina-1.html"
 
-            print(LOGIN_URL)
+            #print(LOGIN_URL)
 
             scraper = cloudscraper.create_scraper() 
             # Get login csrf token
@@ -203,7 +204,7 @@ def zonajobs():
             Total_paginas=paginas2(soup)
             if Total_paginas=="error":
                 return 1
-            print(str(Total_paginas)+" paginas")
+            #print(str(Total_paginas)+" paginas")
             platform=sys.platform
             if platform=="linux":
                 diagonal="/"
@@ -223,13 +224,14 @@ def zonajobs():
                 os.mkdir(path)
                 
             path=str(path)+diagonal+hoy
-            print(path)
+            #print(path)
             if os.path.exists(path):
-                print("CARPETA YA EXISTIA Y NO LA CREA")
+                #print("CARPETA YA EXISTIA Y NO LA CREA")
+                pass
             else:
                 
                 os.mkdir(path)
-                print("CARPETA CREADA")
+                #print("CARPETA CREADA")
                 
             archivo_ruta=path+diagonal+pais+"_"+trabajo+"_"+hoy+".csv"
             if os.path.exists(archivo_ruta):
@@ -241,6 +243,6 @@ def zonajobs():
 
             cuerpo(Total_paginas,trabajo,f,scraper)
             f.close()
-            print("llega a info")
+            #print("llega a info")
             get_info(archivo_ruta,trabajo,pais)
     return 0
